@@ -12,7 +12,7 @@ namespace Microservice.Models
         public DateTime Birthdate { get; }
         private Group group;
         private IReadOnlyDictionary<Discipline, int> scores;
-        public Student(int Id, string fullName, string Login, string Password, string Email, DateTime Birthdate, IReadOnlyDictionary<Discipline, int> scores)
+        /*public Student(int Id, string fullName, string Login, string Password, string Email, DateTime Birthdate, IReadOnlyDictionary<Discipline, int> scores)
         {
             this.Id = Id;
             this.fullName = fullName;
@@ -21,6 +21,15 @@ namespace Microservice.Models
             this.Email = Email;
             this.Birthdate = Birthdate;
             this.scores = scores;
+        }*/
+        public Student(int Id, string fullName, string Login, string Password, string Email, DateTime Birthdate)
+        {
+            this.Id = Id;
+            this.fullName = fullName;
+            this.Login = Login;
+            this.Password = Password;
+            this.Email = Email;
+            this.Birthdate = Birthdate;
         }
         public bool admissionToExams() {
             foreach (var item in scores)
