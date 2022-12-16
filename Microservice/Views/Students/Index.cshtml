@@ -8,7 +8,8 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-controller="Students" asp-action="Create">Create New</a>
+    @*<a asp-action="Create">Create New</a>*@
 </p>
 <table class="table">
     <thead>
@@ -50,9 +51,14 @@
                 @Html.DisplayFor(modelItem => item.Birthdate)
             </td>
             <td>
-                    @Html.ActionLink("Edit", "Edit", new { Id = item.Id }) |
-                    @Html.ActionLink("Details", "Details", new { Id = item.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { Id = item.Id })
+                    @*<a asp-controller="Students" asp-action="Edit">Create New</a>
+                    <a asp-area="" asp-controller="Students" asp-action="Details">Create New</a>
+                    <a asp-area="" asp-controller="Students" asp-action="Delete">Create New</a>*@
+
+                    @Html.ActionLink("Edit", "Edit", "Students", new { Id = item.Id }) |
+                    @Html.ActionLink("Details", "Details", "Students", new { Id = item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", "Students", new { Id = item.Id })
+
                 @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
