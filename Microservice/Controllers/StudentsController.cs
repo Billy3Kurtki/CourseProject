@@ -34,6 +34,7 @@ namespace Microservice.Controllers
         }
 
         // GET: Students/Details/5
+        [HttpGet("Details/{id:int}")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Students == null)
@@ -52,6 +53,7 @@ namespace Microservice.Controllers
         }
 
         // GET: Students/Create
+        [HttpGet("Create")]
         public IActionResult Create()
         {
             return View();
@@ -60,9 +62,9 @@ namespace Microservice.Controllers
         // POST: Students/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,fullName,Login,Password,Email,Birthdate")] Student student)
+        [HttpPost("{id:int}")]
+        public async Task<IActionResult> Create(Student student)
         {
             if (ModelState.IsValid)
             {
@@ -74,6 +76,7 @@ namespace Microservice.Controllers
         }
 
         // GET: Students/Edit/5
+        [HttpGet("Edit/{id:int}")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Students == null)
@@ -92,7 +95,7 @@ namespace Microservice.Controllers
         // POST: Students/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost("Edit/{id:int}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,fullName,Login,Password,Email,Birthdate")] Student student)
         {
@@ -125,6 +128,7 @@ namespace Microservice.Controllers
         }
 
         // GET: Students/Delete/5
+        [HttpGet("Delete/{id:int}")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Students == null)
@@ -143,7 +147,7 @@ namespace Microservice.Controllers
         }
 
         // POST: Students/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost("Delete/{id:int}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
