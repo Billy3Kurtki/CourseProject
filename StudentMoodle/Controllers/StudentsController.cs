@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StudentMoodle.Models;
 
 namespace StudentMoodle.Controllers
 {
+    [Authorize]
     public class StudentsController : Controller
     {
         private readonly StudentContext _context;
