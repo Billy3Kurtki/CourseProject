@@ -1,4 +1,4 @@
-﻿@model IEnumerable<StudentMoodle.Models.StudentView>
+﻿@model IEnumerable<StudentMoodle.Models.UserView>
 
 @{
     ViewData["Title"] = "View";
@@ -27,6 +27,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Birthdate)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RoleId)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -47,6 +50,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Birthdate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RoleId)
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |

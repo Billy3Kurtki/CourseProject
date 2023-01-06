@@ -5,11 +5,11 @@ using StudentMoodle.Models;
 
 namespace StudentMoodle.Controllers
 {
-    public class StudentsController : Controller
+    public class UserController : Controller
     {
-        private readonly StudentContext _context;
+        private readonly UserContext _context;
 
-        public StudentsController(StudentContext context)
+        public UserController(UserContext context)
         {
             _context = context;
         }
@@ -17,13 +17,13 @@ namespace StudentMoodle.Controllers
         // GET: StudentController
         public ActionResult Index()
         {
-            return View(_context.Students.ToList()) ;
+            return View(_context.Users.ToList()) ;
         }
 
         // GET: StudentController/Details/5
         public ActionResult Details(int id)
         {
-            return View(_context.Students.First(x => x.Id == id));
+            return View(_context.Users.First(x => x.Id == id));
         }
 
         // GET: StudentController/Create
@@ -35,11 +35,11 @@ namespace StudentMoodle.Controllers
         // POST: StudentController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(StudentView student)
+        public async Task<IActionResult> Create(UserView user)
         {
             try
             {
-                _context.Students.Add(student);
+                _context.Users.Add(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -52,27 +52,27 @@ namespace StudentMoodle.Controllers
         // GET: StudentController/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Students == null)
+            if (id == null || _context.Users == null)
             {
                 return NotFound();
             }
 
-            var student = await _context.Students.FindAsync(id);
-            if (student == null)
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
             {
                 return NotFound();
             }
-            return View(student);
+            return View(user);
         }
 
         // POST: StudentController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, StudentView student)
+        public async Task<IActionResult> Edit(int id, UserView user)
         {
             try
             {
-                _context.Students.Update(student);
+                _context.Users.Update(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -85,29 +85,29 @@ namespace StudentMoodle.Controllers
         // GET: StudentController/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Students == null)
+            if (id == null || _context.Users == null)
             {
                 return NotFound();
             }
 
-            var student = await _context.Students
+            var user = await _context.Users
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (student == null)
+            if (user == null)
             {
                 return NotFound();
             }
 
-            return View(student);
+            return View(user);
         }
 
         // POST: StudentController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int id, StudentView student)
+        public async Task<IActionResult> Delete(int id, UserView user)
         {
             try
             {
-                _context.Students.Remove(student);
+                _context.Users.Remove(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }

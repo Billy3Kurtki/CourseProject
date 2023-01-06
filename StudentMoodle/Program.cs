@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddDbContext<StudentContext>(options =>
+builder.Services.AddDbContext<UserContext>(options =>
 {
     var connetionString = "Server=localhost;port=3306;Database=coureproject;User Id=root;Password=root;";
     options.UseMySql(connetionString, ServerVersion.AutoDetect(connetionString));
@@ -33,6 +33,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Students}/{action=Index}/{id?}");
+    pattern: "{controller=User}/{action=Index}/{id?}");
 
 app.Run();

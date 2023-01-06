@@ -2,26 +2,26 @@
 
 namespace StudentMoodle.Models
 {
-    public class StudentContext : DbContext
+    public class UserContext : DbContext
     {
-        public StudentContext(DbContextOptions<StudentContext> options)
+        public UserContext(DbContextOptions<UserContext> options)
         : base(options)
         {
         }
-        public DbSet<StudentView> Students { get; set; } = default!;
+        public DbSet<UserView> Users { get; set; } = default!;
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<StudentView>(entity =>
+            modelBuilder.Entity<UserView>(entity =>
             {
                 entity.HasKey(e => new
                 {
                     e.Id
                 });
 
-                entity.ToTable("student");
+                entity.ToTable("user");
 
                 entity.Property(e => e.Id)
-                    .HasColumnName("id");
+                    .HasColumnName("iduser");
 
                 entity.Property(e => e.fullName)
                     .HasMaxLength(80)
@@ -29,14 +29,16 @@ namespace StudentMoodle.Models
 
                 entity.Property(e => e.Login)
                     .HasMaxLength(30)
-                    .HasColumnName("Login");
+                    .HasColumnName("login");
                 entity.Property(e => e.Password)
                     .HasMaxLength(30)
-                    .HasColumnName("Password");
+                    .HasColumnName("password");
                 entity.Property(e => e.Email)
-                    .HasColumnName("Email");
+                    .HasColumnName("email");
                 entity.Property(e => e.Birthdate)
-                    .HasColumnName("Birthdate");
+                    .HasColumnName("birthdate");
+                entity.Property(e => e.RoleId)
+                    .HasColumnName("roleid");
             });
         }
     }
