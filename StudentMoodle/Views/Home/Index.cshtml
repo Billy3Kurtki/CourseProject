@@ -13,6 +13,10 @@
         {
             <h3>Вы выполнили вход под учётной записью студента</h3>
             <h5>@Html.DisplayFor(x => model.fullName)</h5>
+            <p>
+                Список студентов: <input type="button" value="Index"
+                                     onclick="location.href='@Url.Action("IndexStudent", "User")'" />
+            </p>
         }
 
         @if (model.RoleId == 2)

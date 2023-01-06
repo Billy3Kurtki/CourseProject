@@ -23,18 +23,13 @@ builder.Services.AddDbContext<UserContext>(options =>
     options.UseMySql(connetionString, ServerVersion.AutoDetect(connetionString));
 });
 
+
 builder.Services.AddDbContext<RoleContext>(options =>
 {
     var connetionString = "Server=localhost;port=3306;Database=coureproject;User Id=root;Password=root;";
     options.UseMySql(connetionString, ServerVersion.AutoDetect(connetionString));
 });
 
-/*builder.Services.ConfigureApplicationCookie(option =>
-{
-    option.LoginPath = "/Account/Login";
-    option.AccessDeniedPath = "/Home/AccessDenied";
-    option.ExpireTimeSpan = TimeSpan.FromMinutes(20);
-});*/
 
 builder.Services.AddAuthorization(options =>
 {
@@ -49,16 +44,6 @@ builder.Services.AddAuthorization(options =>
         build.RequireAssertion(x => x.User.HasClaim(ClaimTypes.Role, "admin") 
                                     || x.User.HasClaim(ClaimTypes.Role, "lector"));
     });
-
-    /*options.AddPolicy("admin", build =>
-    {
-        build.RequireClaim(ClaimTypes.Role, "admin");
-    });
-
-    options.AddPolicy("lector", build =>
-    {
-        build.RequireClaim(ClaimTypes.Role, "lector");
-    });*/
 
     options.AddPolicy("student", build =>
     {

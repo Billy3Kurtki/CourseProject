@@ -21,13 +21,16 @@ namespace StudentMoodle.Controllers
         {
             return View(_context.Users.ToList()) ;
         }
+
         public ActionResult IndexStudent()
         {
-            return View(_context.Users.Where(x => x.RoleId == 0).ToList());
+            return View(_context.Users.Where(x => x.RoleId == 1).ToList());
         }
+
+        [Authorize(Policy = "lector")]
         public ActionResult IndexLector()
         {
-            return View(_context.Users.Where(x => x.RoleId == 1).ToList());
+            return View(_context.Users.Where(x => x.RoleId == 2).ToList());
         }
 
         // GET: StudentController/Details/5
@@ -95,6 +98,7 @@ namespace StudentMoodle.Controllers
         }
 
         // GET: StudentController/Delete/5
+        [Authorize(Policy = "lector")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Users == null)
