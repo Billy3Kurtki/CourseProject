@@ -21,15 +21,19 @@ namespace StudentMoodle.Controllers
             _roleContext = roleContext;
         }
 
-        public IActionResult Login()
+        public async Task<ActionResult> Login()
         {
-            ClaimsPrincipal claimUser = HttpContext.User;
             /*var a = HttpContext.User.Claims.Where(x => x.Type == ClaimsIdentity.DefaultNameClaimType).Single().Value;*/
             /*var currentUserName = claimUser.FindFirst(ClaimTypes.NameIdentifier).Value;
             var user = await _context.Users
                     .FirstOrDefaultAsync(s => s.Id.ToString() == currentUserName);*/
+
+            ClaimsPrincipal claimUser = HttpContext.User;
+            var currentUserName = claimUser.Identity.Name;
+            var user = await _userContext.Users
+                .FirstOrDefaultAsync(s => s.Email == currentUserName);
             if (claimUser.Identity.IsAuthenticated)
-                return RedirectToAction("Index", "Home"/*, user*/);
+                return RedirectToAction("Index", "Home", user);
 
 
             return View();

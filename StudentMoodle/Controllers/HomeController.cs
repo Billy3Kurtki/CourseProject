@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using StudentMoodle.Models;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace StudentMoodle.Controllers
 {
@@ -19,6 +21,19 @@ namespace StudentMoodle.Controllers
         public IActionResult Index(UserView user)
         {
             return View("Index", user);
+        }
+
+        public async Task<ActionResult> Index2()
+        {
+            ClaimsPrincipal claimUser = HttpContext.User;
+            var currentUserName = claimUser.Identity.Name;
+            var user = await _context.Users
+                    .FirstAsync(s => s.Email == currentUserName);
+
+            if (claimUser.Identity.IsAuthenticated)
+                return RedirectToAction("Index", "Home", user);
+
+            return RedirectToAction("Login", "Account");
         }
 
         public IActionResult Privacy()
