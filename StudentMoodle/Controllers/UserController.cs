@@ -29,6 +29,7 @@ namespace StudentMoodle.Controllers
         }
 
         // GET: StudentController/Create
+        [Authorize(Policy = "admin")]
         public ActionResult Create()
         {
             return View();
@@ -52,6 +53,7 @@ namespace StudentMoodle.Controllers
         }
 
         // GET: StudentController/Edit/5
+        [Authorize(Policy = "lector")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Users == null)

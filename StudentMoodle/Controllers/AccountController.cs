@@ -6,18 +6,30 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using StudentMoodle.Models;
 using Microsoft.EntityFrameworkCore;
 using StudentMoodle.Models.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace StudentMoodle.Controllers
 {
     public class AccountController : Controller
     {
 
-        private readonly UserContext _context;
+        private readonly UserContext _userContext;
+        private readonly RoleContext _roleContext;
 
-        public AccountController(UserContext context)
+        public AccountController(UserContext userContext, RoleContext roleContext)
         {
-            _context = context;
+            _userContext = userContext;
+            _roleContext = roleContext;
         }
+
+        /*private readonly UserManager<UserView> _userManager;
+        private readonly SignInManager<UserView> _signInManager;
+
+        public AccountController(UserManager<UserView> userManager, SignInManager<UserView> signInManager)
+        {
+            _userManager = userManager;
+            _signInManager = signInManager;
+        }*/
 
         public IActionResult Login()
         {
@@ -36,13 +48,17 @@ namespace StudentMoodle.Controllers
         {
             if (ModelState.IsValid)
             {
-                var student = await _context.Users
+                var user = await _userContext.Users
                     .FirstOrDefaultAsync(s => s.Email == modelLogin.Email && s.Password == modelLogin.Password);
-                if (student != null)
+                var role = await _roleContext.Roles
+                    .FirstOrDefaultAsync(r => r.Id == user.RoleId);
+
+                if (user != null)
                 {
-                    await Authenticate(modelLogin.Email); // аутентификация
+                    await Authenticate(modelLogin.Email, role.RoleName); // аутентификация
 
                     return RedirectToAction("Index", "User");
+                    //await Authenticate(modelLogin.Email); // аутентификация
                 }
 
                 ViewData["ValidateMessage"] = "user not found";
@@ -52,12 +68,13 @@ namespace StudentMoodle.Controllers
             return View(modelLogin);
         }
 
-        private async System.Threading.Tasks.Task Authenticate(string userName)
+        private async System.Threading.Tasks.Task Authenticate(string userName, string role)
         {
             // создаем один claim
             var claims = new List<Claim>
             {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, userName)
+                new Claim(ClaimsIdentity.DefaultNameClaimType, userName),
+                new Claim(ClaimTypes.Role, role)
             };
             // создаем объект ClaimsIdentity
             ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
