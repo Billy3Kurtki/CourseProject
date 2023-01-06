@@ -1,8 +1,45 @@
-﻿@{
+﻿@using StudentMoodle.Models
+@model UserView
+@{
     ViewData["Title"] = "Home Page";
+}
+@{
+    var model = Model;
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">
+        @if (model.RoleId == 0)
+        {
+            <h3>Вы выполнили вход под учётной записью студента</h3>
+            <h5>@Html.DisplayFor(x => model.fullName)</h5>
+        }
+        @if (model.RoleId == 1)
+        {
+            <h3>Вы выполнили вход под учётной записью лектора</h3>
+            <h5>@Html.DisplayFor(x => model.fullName)</h5><br />
+
+            <p>
+                Список дисциплин: <input type="button" value="Index"
+                   onclick="location.href='@Url.Action("IndexDiscipline", "Lector")'" />
+            </p>
+        }
+
+        @if (model.RoleId == 2)
+        {
+            <h3>Вы выполнили вход под учётной записью администратора</h3>
+            <h5>@Html.DisplayFor(x => model.fullName)</h5><br />
+
+           <p>Список пользователей: <input type="button" value="Index"
+                onclick="location.href='@Url.Action("Index", "User")'" />
+           </p>
+           <p>Список студентов: <input type="button" value="Index"
+                onclick="location.href='@Url.Action("IndexStudent", "User")'" />
+            </p>
+           <p>Список лекторов: <input type="button" value="Index"
+                onclick="location.href='@Url.Action("IndexLector", "User")'" />
+            </p>
+        }
+    </h1>
+    
 </div>

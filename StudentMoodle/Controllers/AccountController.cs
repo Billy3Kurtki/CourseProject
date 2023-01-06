@@ -6,6 +6,10 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using StudentMoodle.Models;
 using Microsoft.EntityFrameworkCore;
 using StudentMoodle.Models.Authorization;
+<<<<<<< HEAD
+=======
+using System.Runtime.InteropServices;
+>>>>>>> ggg
 using Microsoft.AspNetCore.Identity;
 
 namespace StudentMoodle.Controllers
@@ -22,6 +26,7 @@ namespace StudentMoodle.Controllers
             _roleContext = roleContext;
         }
 
+<<<<<<< HEAD
         /*private readonly UserManager<UserView> _userManager;
         private readonly SignInManager<UserView> _signInManager;
 
@@ -32,11 +37,17 @@ namespace StudentMoodle.Controllers
         }*/
 
         public IActionResult Login()
+=======
+        public async Task<IActionResult> Login()
+>>>>>>> ggg
         {
             ClaimsPrincipal claimUser = HttpContext.User;
-
+            /*var a = HttpContext.User.Claims.Where(x => x.Type == ClaimsIdentity.DefaultNameClaimType).Single().Value;*/
+            var currentUserName = claimUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var user = await _context.Users
+                    .FirstOrDefaultAsync(s => s.Id.ToString() == currentUserName);
             if (claimUser.Identity.IsAuthenticated)
-                return RedirectToAction("Index", "User");
+                return RedirectToAction("Index", "Home", user);
 
 
             return View();
@@ -48,17 +59,26 @@ namespace StudentMoodle.Controllers
         {
             if (ModelState.IsValid)
             {
+<<<<<<< HEAD
                 var user = await _userContext.Users
                     .FirstOrDefaultAsync(s => s.Email == modelLogin.Email && s.Password == modelLogin.Password);
                 var role = await _roleContext.Roles
                     .FirstOrDefaultAsync(r => r.Id == user.RoleId);
 
+=======
+                var user = await _context.Users
+                    .FirstOrDefaultAsync(s => s.Email == modelLogin.Email && s.Password == modelLogin.Password);
+>>>>>>> ggg
                 if (user != null)
                 {
                     await Authenticate(modelLogin.Email, role.RoleName); // аутентификация
 
+<<<<<<< HEAD
                     return RedirectToAction("Index", "User");
                     //await Authenticate(modelLogin.Email); // аутентификация
+=======
+                    return RedirectToAction("Index", "Home", user);
+>>>>>>> ggg
                 }
 
                 ViewData["ValidateMessage"] = "user not found";

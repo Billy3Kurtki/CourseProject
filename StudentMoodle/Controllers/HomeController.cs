@@ -7,15 +7,18 @@ namespace StudentMoodle.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly UserContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, UserContext context)
         {
             _logger = logger;
+            _context = context;
+
         }
 
-        public IActionResult Index()
+        public IActionResult Index(UserView user)
         {
-            return View();
+            return View("Index", user);
         }
 
         public IActionResult Privacy()

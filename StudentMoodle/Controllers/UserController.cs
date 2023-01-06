@@ -21,6 +21,14 @@ namespace StudentMoodle.Controllers
         {
             return View(_context.Users.ToList()) ;
         }
+        public ActionResult IndexStudent()
+        {
+            return View(_context.Users.Where(x => x.RoleId == 0).ToList());
+        }
+        public ActionResult IndexLector()
+        {
+            return View(_context.Users.Where(x => x.RoleId == 1).ToList());
+        }
 
         // GET: StudentController/Details/5
         public ActionResult Details(int id)
