@@ -9,12 +9,13 @@
 
 <div class="text-center">
     <h1 class="display-4">
-        @if (model.RoleId == 0)
+        @if (model.RoleId == 1)
         {
             <h3>Вы выполнили вход под учётной записью студента</h3>
             <h5>@Html.DisplayFor(x => model.fullName)</h5>
         }
-        @if (model.RoleId == 1)
+
+        @if (model.RoleId == 2)
         {
             <h3>Вы выполнили вход под учётной записью лектора</h3>
             <h5>@Html.DisplayFor(x => model.fullName)</h5><br />
@@ -25,7 +26,7 @@
             </p>
         }
 
-        @if (model.RoleId == 2)
+        @if (model.RoleId == 3)
         {
             <h3>Вы выполнили вход под учётной записью администратора</h3>
             <h5>@Html.DisplayFor(x => model.fullName)</h5><br />
