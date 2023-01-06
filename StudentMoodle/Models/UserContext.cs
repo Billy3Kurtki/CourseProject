@@ -9,6 +9,7 @@ namespace StudentMoodle.Models
         {
         }
         public DbSet<UserView> Users { get; set; } = default!;
+        public DbSet<Role> Roles { get; set; } = default!;
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UserView>(entity =>

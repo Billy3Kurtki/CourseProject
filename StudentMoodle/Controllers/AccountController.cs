@@ -1,20 +1,20 @@
-﻿/*using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microservice.Models.Authorization;
-using Microservice.Models;
+using StudentMoodle.Models;
 using Microsoft.EntityFrameworkCore;
+using StudentMoodle.Models.Authorization;
 
-namespace Microservice.Controllers
+namespace StudentMoodle.Controllers
 {
     public class AccountController : Controller
     {
 
-        private readonly StudentContext _context;
+        private readonly UserContext _context;
 
-        public AccountController(StudentContext context)
+        public AccountController(UserContext context)
         {
             _context = context;
         }
@@ -24,7 +24,7 @@ namespace Microservice.Controllers
             ClaimsPrincipal claimUser = HttpContext.User;
 
             if (claimUser.Identity.IsAuthenticated)
-                return RedirectToAction("Index", "Students");
+                return RedirectToAction("Index", "User");
 
 
             return View();
@@ -36,13 +36,13 @@ namespace Microservice.Controllers
         {
             if (ModelState.IsValid)
             {
-                var student = await _context.Students
+                var student = await _context.Users
                     .FirstOrDefaultAsync(s => s.Email == modelLogin.Email && s.Password == modelLogin.Password);
                 if (student != null)
                 {
                     await Authenticate(modelLogin.Email); // аутентификация
 
-                    return RedirectToAction("Index", "Students");
+                    return RedirectToAction("Index", "User");
                 }
 
                 ViewData["ValidateMessage"] = "user not found";
@@ -74,4 +74,3 @@ namespace Microservice.Controllers
         }
     }
 }
-*/

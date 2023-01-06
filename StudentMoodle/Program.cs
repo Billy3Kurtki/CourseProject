@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using StudentMoodle.Models;
 
@@ -6,11 +7,20 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(option =>
+    {
+        option.LoginPath = "/Account/Login";
+        option.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+    });
+
 builder.Services.AddDbContext<UserContext>(options =>
 {
     var connetionString = "Server=localhost;port=3306;Database=coureproject;User Id=root;Password=root;";
     options.UseMySql(connetionString, ServerVersion.AutoDetect(connetionString));
 });
+
+
 
 var app = builder.Build();
 
@@ -29,10 +39,12 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=User}/{action=Index}/{id?}");
+    pattern: "{controller=Account}/{action=Login}/{id?}");
 
 app.Run();

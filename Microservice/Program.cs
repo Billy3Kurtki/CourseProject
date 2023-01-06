@@ -1,4 +1,4 @@
-using Microservice.Models;
+/*using Microservice.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Configuration;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
@@ -13,7 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-/*builder.Services.AddSwaggerGen();*/
+*//*builder.Services.AddSwaggerGen();*//*
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(option =>
@@ -28,12 +28,12 @@ builder.Services.AddDbContext<StudentContext>(options =>
     options.UseMySql(connetionString, ServerVersion.AutoDetect(connetionString));
 });
 
-/*builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+*//*builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
         options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
         options.AccessDeniedPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
-    });*/
+    });*//*
 
 
 var app = builder.Build();
@@ -63,3 +63,4 @@ app.MapControllerRoute(
     pattern: "{controller=Account}/{action=Login}/{id?}");
 
 app.Run();
+*/
