@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using StudentMoodle.Models;
 using Microsoft.EntityFrameworkCore;
 using StudentMoodle.Models.Authorization;
+using System.Runtime.InteropServices;
+using Microsoft.AspNetCore.Identity;
 
 namespace StudentMoodle.Controllers
 {
@@ -19,12 +21,15 @@ namespace StudentMoodle.Controllers
             _context = context;
         }
 
-        public IActionResult Login()
+        public async Task<IActionResult> Login()
         {
             ClaimsPrincipal claimUser = HttpContext.User;
-
+            /*var a = HttpContext.User.Claims.Where(x => x.Type == ClaimsIdentity.DefaultNameClaimType).Single().Value;*/
+            var currentUserName = claimUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var user = await _context.Users
+                    .FirstOrDefaultAsync(s => s.Id.ToString() == currentUserName);
             if (claimUser.Identity.IsAuthenticated)
-                return RedirectToAction("Index", "User");
+                return RedirectToAction("Index", "Home", user);
 
 
             return View();
@@ -36,13 +41,13 @@ namespace StudentMoodle.Controllers
         {
             if (ModelState.IsValid)
             {
-                var student = await _context.Users
+                var user = await _context.Users
                     .FirstOrDefaultAsync(s => s.Email == modelLogin.Email && s.Password == modelLogin.Password);
-                if (student != null)
+                if (user != null)
                 {
                     await Authenticate(modelLogin.Email); // аутентификация
 
-                    return RedirectToAction("Index", "User");
+                    return RedirectToAction("Index", "Home", user);
                 }
 
                 ViewData["ValidateMessage"] = "user not found";
