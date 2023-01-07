@@ -15,6 +15,8 @@ namespace StudentMoodle.Models
         public DbSet<Test> Tests { get; set; } = default!;
         public DbSet<LabWork> LabWorks { get; set; } = default!;
         public DbSet<Score> Scores { get; set; } = default!;
+        public DbSet<Task> Tasks { get; set; } = default!;
+        public DbSet<Answer> Answers { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -157,6 +159,47 @@ namespace StudentMoodle.Models
 
                 entity.Property(e => e.score)
                     .HasColumnName("score");
+            });
+
+            modelBuilder.Entity<Task>(entity =>
+            {
+                entity.HasKey(e => new
+                {
+                    e.Id
+                });
+
+                entity.ToTable("task");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("idTask");
+
+                entity.Property(e => e.Title)
+                    .HasColumnName("title");
+
+                entity.Property(e => e.idTest)
+                    .HasColumnName("Test_idTest");
+            });
+
+            modelBuilder.Entity<Answer>(entity =>
+            {
+                entity.HasKey(e => new
+                {
+                    e.Id
+                });
+
+                entity.ToTable("answeroption");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("idAnswerOption");
+
+                entity.Property(e => e.Title)
+                    .HasColumnName("title");
+
+                entity.Property(e => e.isRight)
+                    .HasColumnName("isRight");
+
+                entity.Property(e => e.idTask)
+                    .HasColumnName("Task_idTask");
             });
         }
     }
