@@ -10,8 +10,8 @@ namespace StudentMoodle.Models
         public string Password { get; }
         public string Email { get; }
         public DateTime Birthdate { get; }
-        private Group group;
-        private IReadOnlyDictionary<Discipline, int> scores;
+        public int iDGroup;
+        public IReadOnlyDictionary<Discipline, int> scores;
         /*public Student(int Id, string fullName, string Login, string Password, string Email, DateTime Birthdate, IReadOnlyDictionary<Discipline, int> scores)
         {
             this.Id = Id;
@@ -22,7 +22,7 @@ namespace StudentMoodle.Models
             this.Birthdate = Birthdate;
             this.scores = scores;
         }*/
-        public Student(int Id, string fullName, string Login, string Password, string Email, DateTime Birthdate)
+        /*public Student(int Id, string fullName, string Login, string Password, string Email, DateTime Birthdate)
         {
             this.Id = Id;
             this.fullName = fullName;
@@ -30,7 +30,7 @@ namespace StudentMoodle.Models
             this.Password = Password;
             this.Email = Email;
             this.Birthdate = Birthdate;
-        }
+        }*/
         public bool admissionToExams() {
             foreach (var item in scores)
             {

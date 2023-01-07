@@ -2,13 +2,19 @@
 
 namespace StudentMoodle.Models
 {
-    public class UserContext : DbContext
+    public class ApplicationDbContext : DbContext
     {
-        public UserContext(DbContextOptions<UserContext> options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
         {
         }
         public DbSet<UserView> Users { get; set; } = default!;
+        public DbSet<RoleView> Roles { get; set; } = default!;
+        public DbSet<Student> Students { get; set; } = default!;
+        public DbSet<Lector> Lectors { get; set; } = default!;
+        public DbSet<Test> Tests { get; set; } = default!;
+        public DbSet<LabWork> LabWorks { get; set; } = default!;
+        public DbSet<Score> Scores { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -41,20 +47,6 @@ namespace StudentMoodle.Models
                 entity.Property(e => e.RoleId)
                     .HasColumnName("roleid");
             });
-        }
-    }
-
-    public class RoleContext : DbContext
-    {
-        public RoleContext(DbContextOptions<RoleContext> options)
-        : base(options)
-        {
-        }
-
-        public DbSet<RoleView> Roles { get; set; } = default!;
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
             modelBuilder.Entity<RoleView>(entity =>
             {
                 entity.HasKey(e => new
@@ -71,7 +63,101 @@ namespace StudentMoodle.Models
                     .HasMaxLength(80)
                     .HasColumnName("roleName");
             });
+            modelBuilder.Entity<Student>(entity =>
+            {
+                entity.HasKey(e => new
+                {
+                    e.Id
+                });
 
+                entity.ToTable("student");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("user_iduser");
+
+                entity.Property(e => e.iDGroup)
+                    .HasColumnName("group_idGroup");
+            });
+            modelBuilder.Entity<Lector>(entity =>
+            {
+                entity.HasKey(e => new
+                {
+                    e.Id
+                });
+
+                entity.ToTable("lector");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("user_iduser");
+            });
+            modelBuilder.Entity<Test>(entity =>
+            {
+                entity.HasKey(e => new
+                {
+                    e.Id
+                });
+
+                entity.ToTable("test");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id");
+
+                entity.Property(e => e.Title)
+                    .HasColumnName("Title");
+
+                entity.Property(e => e.DeadLine)
+                    .HasColumnName("deadline");
+
+                entity.Property(e => e.status1)
+                    .HasColumnName("status");
+            });
+
+            modelBuilder.Entity<LabWork>(entity =>
+            {
+                entity.HasKey(e => new
+                {
+                    e.Id
+                });
+
+                entity.ToTable("labwork");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("idLabWork");
+
+                entity.Property(e => e.Title)
+                    .HasColumnName("title");
+
+                entity.Property(e => e.DeadLine)
+                    .HasColumnName("deadline");
+
+                entity.Property(e => e.status1)
+                    .HasColumnName("manual");
+
+                entity.Property(e => e.status1)
+                    .HasColumnName("status");
+            });
+
+            modelBuilder.Entity<Score>(entity =>
+            {
+                entity.HasKey(e => new
+                {
+                    e.Id
+                });
+
+                entity.ToTable("score");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("idScore");
+
+                entity.Property(e => e.userId)
+                    .HasColumnName("student_user_iduser");
+
+                entity.Property(e => e.disciplineId)
+                    .HasColumnName("discipline_iddiscipline");
+
+                entity.Property(e => e.score)
+                    .HasColumnName("score");
+            });
         }
     }
 }

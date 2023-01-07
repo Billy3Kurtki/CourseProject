@@ -11,8 +11,8 @@ namespace StudentMoodle.Models
         public string Password { get; }
         public string Email { get; }
         public DateTime Birthdate { get; }
-        private IReadOnlyCollection<Discipline> disciplines = new Collection<Discipline>();
-        public Lector(int Id, string fullName, string Login, string Password, string Email, DateTime Birthdate, IReadOnlyCollection<Discipline> disciplines)
+        public IReadOnlyCollection<Discipline> disciplines = new Collection<Discipline>();
+        /*public Lector(int Id, string fullName, string Login, string Password, string Email, DateTime Birthdate, IReadOnlyCollection<Discipline> disciplines)
         {
             this.Id = Id;
             this.fullName = fullName;
@@ -21,6 +21,6 @@ namespace StudentMoodle.Models
             this.Email = Email;
             this.Birthdate = Birthdate;
             this.disciplines = disciplines;
-        }
+        }*/
     }
 }
