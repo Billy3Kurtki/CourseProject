@@ -12,6 +12,7 @@ namespace StudentMoodle.Models
         public DbSet<RoleView> Roles { get; set; } = default!;
         public DbSet<Student> Students { get; set; } = default!;
         public DbSet<Lector> Lectors { get; set; } = default!;
+        public DbSet<Discipline> Disciplines { get; set; } = default!;
         public DbSet<Test> Tests { get; set; } = default!;
         public DbSet<LabWork> LabWorks { get; set; } = default!;
         public DbSet<Score> Scores { get; set; } = default!;
@@ -92,6 +93,26 @@ namespace StudentMoodle.Models
                 entity.Property(e => e.Id)
                     .HasColumnName("user_iduser");
             });
+
+            modelBuilder.Entity<Discipline>(entity =>
+            {
+                entity.HasKey(e => new
+                {
+                    e.Id
+                });
+
+                entity.ToTable("discipline");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("iddiscipline");
+
+                entity.Property(e => e.Title)
+                    .HasColumnName("title");
+
+                entity.Property(e => e.IdLector)
+                    .HasColumnName("idlector");
+            });
+
             modelBuilder.Entity<Test>(entity =>
             {
                 entity.HasKey(e => new
@@ -108,7 +129,7 @@ namespace StudentMoodle.Models
                     .HasColumnName("Title");
 
                 entity.Property(e => e.DeadLine)
-                    .HasColumnName("deadline");
+                    .HasColumnName("deadLine");
 
                 entity.Property(e => e.status1)
                     .HasColumnName("status");

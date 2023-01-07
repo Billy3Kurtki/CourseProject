@@ -1,11 +1,11 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace Microservice.Models
+namespace StudentMoodle.Models
 {
     public class LabWork
     {
-        private IReadOnlyCollection<Task> tasks = new Collection<Task>();
-        private IReadOnlyCollection<Student> listPassStudents = new Collection<Student>();
+        public IReadOnlyCollection<Task> tasks = new Collection<Task>();
+        public IReadOnlyCollection<Student> listPassStudents = new Collection<Student>();
 
         public enum Status
         {
@@ -21,7 +21,7 @@ namespace Microservice.Models
         public Status status1 { get; set; }
         public string Manual { get; }
 
-        public LabWork(int Id, string Title, DateTime DeadLine, string Manual, IReadOnlyCollection<Task> tasks, IReadOnlyCollection<Student> listPassStudents)
+        /*public LabWork(int Id, string Title, DateTime DeadLine, string Manual, IReadOnlyCollection<Task> tasks, IReadOnlyCollection<Student> listPassStudents)
         {
             this.Id = Id;
             this.Title = Title;
@@ -37,7 +37,7 @@ namespace Microservice.Models
             this.tasks = tasks;
             this.listPassStudents = listPassStudents;
             this.status1 = status1;
-        }
+        }*/
 
         public void closeTest()
         {

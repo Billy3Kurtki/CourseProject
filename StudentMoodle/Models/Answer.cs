@@ -1,16 +1,18 @@
-﻿namespace Microservice.Models
+﻿namespace StudentMoodle.Models
 {
     public class Answer
     {
         public int Id { get; }
-        public string Title { get; }
-        public bool isRight { get; }
+        public string Title { get; set; }
+        public bool isRight { get; set; }
 
-        public Answer(int id, string title, bool isRight)
+        public int idTask { get; set; }
+
+        /*public Answer(int id, string title, bool isRight)
         {
             Id = id;
             Title = title;
             this.isRight = isRight;
-        }
+        }*/
     }
 }

@@ -19,7 +19,7 @@ namespace StudentMoodle.Controllers
         }
 
         public IActionResult Index(UserView user)
-        {
+        { 
             return View("Index", user);
         }
 

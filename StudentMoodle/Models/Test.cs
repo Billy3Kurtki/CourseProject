@@ -1,12 +1,12 @@
 ﻿using Microsoft.VisualBasic;
 using System.Collections.ObjectModel;
 
-namespace Microservice.Models
+namespace StudentMoodle.Models
 {
     public class Test
     {
-        private IReadOnlyCollection<Task> tasks = new Collection<Task>();
-        private IReadOnlyCollection<Student> listPassStudents = new Collection<Student>();
+        public IReadOnlyCollection<Task> tasks = new Collection<Task>();
+        public IReadOnlyCollection<Student> listPassStudents = new Collection<Student>();
 
         public enum Status
         {
@@ -16,12 +16,12 @@ namespace Microservice.Models
             Сhecked
         }
 
-        private int Id { get; }
-        private string Title { get; }
-        private DateTime DeadLine { get; }
-        private Status status1 { get; set; }
+        public int Id { get; }
+        public string Title { get; }
+        public DateTime DeadLine { get; }
+        public Status status1 { get; set; }
 
-        public Test(int Id, string Title, DateTime DeadLine, IReadOnlyCollection<Task> tasks)
+        /*public Test(int Id, string Title, DateTime DeadLine, IReadOnlyCollection<Task> tasks)
         {
            this.Id = Id;
            this.Title = Title;
@@ -36,7 +36,7 @@ namespace Microservice.Models
             this.status1 = status1;
             this.listPassStudents = listPassStudents;
             this.tasks = tasks;
-        }
+        }*/
 
         public void closeTest() {
             status1 = Status.Close;
