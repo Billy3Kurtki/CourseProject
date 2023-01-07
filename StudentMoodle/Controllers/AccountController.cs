@@ -12,25 +12,18 @@ namespace StudentMoodle.Controllers
     public class AccountController : Controller
     {
 
-        private readonly UserContext _userContext;
-        private readonly RoleContext _roleContext;
+        private readonly ApplicationDbContext _context;
 
-        public AccountController(UserContext userContext, RoleContext roleContext)
+        public AccountController(ApplicationDbContext userContext)
         {
-            _userContext = userContext;
-            _roleContext = roleContext;
+            _context = userContext;
         }
 
         public async Task<ActionResult> Login()
         {
-            /*var a = HttpContext.User.Claims.Where(x => x.Type == ClaimsIdentity.DefaultNameClaimType).Single().Value;*/
-            /*var currentUserName = claimUser.FindFirst(ClaimTypes.NameIdentifier).Value;
-            var user = await _context.Users
-                    .FirstOrDefaultAsync(s => s.Id.ToString() == currentUserName);*/
-
             ClaimsPrincipal claimUser = HttpContext.User;
             var currentUserName = claimUser.Identity.Name;
-            var user = await _userContext.Users
+            var user = await _context.Users
                 .FirstOrDefaultAsync(s => s.Email == currentUserName);
             if (claimUser.Identity.IsAuthenticated)
                 return RedirectToAction("Index", "Home", user);
@@ -45,15 +38,13 @@ namespace StudentMoodle.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await _userContext.Users
+                var user = await _context.Users
                     .FirstOrDefaultAsync(s => s.Email == modelLogin.Email && s.Password == modelLogin.Password);
-                var role = await _roleContext.Roles
+                var role = await _context.Roles
                     .FirstOrDefaultAsync(r => r.Id == user.RoleId);;
                 if (user != null)
                 {
                     await Authenticate(modelLogin.Email, role.RoleName); // аутентификация
-                    //return RedirectToAction("Index", "User");
-                    //await Authenticate(modelLogin.Email); // аутентификация
                     return RedirectToAction("Index", "Home", user);
                 }
 
@@ -81,7 +72,6 @@ namespace StudentMoodle.Controllers
         [HttpGet]
         public async Task<IActionResult> LogOut()
         {
-
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login", "Account");
         }

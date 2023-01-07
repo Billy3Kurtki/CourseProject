@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace Microservice.Models
+namespace StudentMoodle.Models
 {
     public class Group
     {

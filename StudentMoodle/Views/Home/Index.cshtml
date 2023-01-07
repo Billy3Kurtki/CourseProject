@@ -9,7 +9,7 @@
 
 <div class="text-center">
     <h1 class="display-4">
-        @if (model.RoleId == 1)
+        @if (model.RoleId == RoleType.Student)
         {
             <h3>Вы выполнили вход под учётной записью студента</h3>
             <h5>@Html.DisplayFor(x => model.fullName)</h5>

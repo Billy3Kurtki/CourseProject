@@ -17,14 +17,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     });
 
 
-builder.Services.AddDbContext<UserContext>(options =>
-{
-    var connetionString = "Server=localhost;port=3306;Database=coureproject;User Id=root;Password=root;";
-    options.UseMySql(connetionString, ServerVersion.AutoDetect(connetionString));
-});
-
-
-builder.Services.AddDbContext<RoleContext>(options =>
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     var connetionString = "Server=localhost;port=3306;Database=coureproject;User Id=root;Password=root;";
     options.UseMySql(connetionString, ServerVersion.AutoDetect(connetionString));

@@ -1,9 +1,9 @@
 ﻿using Microsoft.VisualBasic;
 using System.Collections.ObjectModel;
 
-namespace Microservice.Models
+namespace StudentMoodle.Models
 {
-    public class Lector: UserBase
+    public class Lector
     {
         public int Id { get; }
         public string fullName { get; }

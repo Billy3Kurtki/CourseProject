@@ -1,8 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace Microservice.Models
+namespace StudentMoodle.Models
 {
-    public class Student: UserBase
+    public class Student
     {
         public int Id { get; }
         public string fullName { get; }

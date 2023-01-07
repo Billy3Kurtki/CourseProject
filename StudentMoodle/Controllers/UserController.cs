@@ -9,9 +9,9 @@ namespace StudentMoodle.Controllers
     [Authorize]
     public class UserController : Controller
     {
-        private readonly UserContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public UserController(UserContext context)
+        public UserController(ApplicationDbContext context)
         {
             _context = context;
         }

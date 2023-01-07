@@ -11,4 +11,10 @@
         public int? RoleId { get; set; }
         //public Role Role { get; set; }
     }
+
+    public class RoleView
+    {
+        public int Id { get; set; }
+        public string RoleName { get; set; }
+    }
 }
