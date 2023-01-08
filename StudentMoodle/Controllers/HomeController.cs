@@ -21,7 +21,18 @@ namespace StudentMoodle.Controllers
         public IActionResult Index(UserView user)
         {
             var disciplines = new List<Discipline>();
-            disciplines = _context.Disciplines.Where(d => d.IdLector == user.Id).ToList();
+            if(user.RoleId == 2)
+                disciplines = _context.Disciplines.Where(d => d.IdLector == user.Id).ToList();
+            if(user.RoleId == 1)
+            {
+                var student = _context.Students.First(s => s.Id == user.Id);
+                var group_discplines = _context.Group_Disciplines.Where(g => g.Idgroup == student.iDGroup).ToList();
+                //disciplines = _context.Disciplines.Where(s => s.Id == group_discplines.Iddiscipline).ToList();
+                foreach (var item in group_discplines)
+                {
+                    disciplines.Add(_context.Disciplines.First(d => d.Id == item.Iddiscipline));
+                }
+            }
             var model = (
                 user,
                 disciplines);
