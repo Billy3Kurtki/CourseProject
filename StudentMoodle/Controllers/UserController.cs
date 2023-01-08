@@ -27,7 +27,7 @@ namespace StudentMoodle.Controllers
             return View(_context.Users.Where(x => x.RoleId == 1).ToList());
         }
 
-        [Authorize(Policy = "lector")]
+        [Authorize(Policy = "admin")]
         public ActionResult IndexLector()
         {
             return View(_context.Users.Where(x => x.RoleId == 2).ToList());

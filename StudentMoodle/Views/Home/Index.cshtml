@@ -24,7 +24,7 @@
 
             <p>
                 Список дисциплин: <input type="button" value="Index"
-                   onclick="location.href='@Url.Action("IndexDiscipline", "Lector")'" />
+                   onclick="location.href='@Url.Action("Index", "Discipline")'" />
             </p>
         }
 
@@ -44,16 +44,22 @@
             </p>
         }
     </h1>
-    <div>
-        <h2>Список доступных дисциплин</h2>
-        <table class="table">
-        @foreach (var item in model2) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-        </tr>
-        }
-        </table>
-    </div>
+    @if (model.RoleId == 1 || model.RoleId == 2)
+    {
+        <div>
+            <h2>Список доступных дисциплин</h2>
+            <table class="table">
+                @foreach (var item in model2)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Title)
+                            <input type="button" value="Index"
+                           onclick="location.href='@Url.Action($"Index{item.Title}", "Discipline")'" />
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    }
 </div>

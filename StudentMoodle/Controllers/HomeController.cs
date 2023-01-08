@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StudentMoodle.Models;
 using System.Diagnostics;
@@ -6,6 +7,7 @@ using System.Security.Claims;
 
 namespace StudentMoodle.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -26,7 +28,7 @@ namespace StudentMoodle.Controllers
             if(user.RoleId == 1)
             {
                 var student = _context.Students.First(s => s.Id == user.Id);
-                var group_discplines = _context.Group_Disciplines.Where(g => g.Idgroup == student.iDGroup).ToList();
+                var group_discplines = _context.Group_Disciplines.Where(g => g.Idgroup == student.IdGroup).ToList();
                 //disciplines = _context.Disciplines.Where(s => s.Id == group_discplines.Iddiscipline).ToList();
                 foreach (var item in group_discplines)
                 {

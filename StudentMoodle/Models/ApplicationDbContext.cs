@@ -79,7 +79,7 @@ namespace StudentMoodle.Models
                 entity.Property(e => e.Id)
                     .HasColumnName("user_iduser");
 
-                entity.Property(e => e.iDGroup)
+                entity.Property(e => e.IdGroup)
                     .HasColumnName("group_idGroup");
             });
             modelBuilder.Entity<Lector>(entity =>

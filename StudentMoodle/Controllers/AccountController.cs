@@ -42,6 +42,7 @@ namespace StudentMoodle.Controllers
                     .FirstOrDefaultAsync(s => s.Email == modelLogin.Email && s.Password == modelLogin.Password);
                 var role = await _context.Roles
                     .FirstOrDefaultAsync(r => r.Id == user.RoleId);;
+
                 if (user != null)
                 {
                     await Authenticate(modelLogin.Email, role.RoleName); // аутентификация
