@@ -19,8 +19,13 @@ namespace StudentMoodle.Controllers
         }
 
         public IActionResult Index(UserView user)
-        { 
-            return View("Index", user);
+        {
+            var disciplines = new List<Discipline>();
+            disciplines = _context.Disciplines.Where(d => d.IdLector == user.Id).ToList();
+            var model = (
+                user,
+                disciplines);
+            return View("Index", model);
         }
 
         public async Task<ActionResult> Index2()

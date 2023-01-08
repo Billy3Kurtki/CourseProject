@@ -48,7 +48,7 @@ namespace StudentMoodle.Models
                 entity.Property(e => e.Birthdate)
                     .HasColumnName("birthdate");
                 entity.Property(e => e.RoleId)
-                    .HasColumnName("roleid");
+                    .HasColumnName("Role_id");
             });
             modelBuilder.Entity<RoleView>(entity =>
             {
@@ -110,7 +110,7 @@ namespace StudentMoodle.Models
                     .HasColumnName("title");
 
                 entity.Property(e => e.IdLector)
-                    .HasColumnName("idlector");
+                    .HasColumnName("lector_User_idUser");
             });
 
             modelBuilder.Entity<Test>(entity =>

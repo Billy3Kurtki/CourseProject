@@ -1,15 +1,17 @@
 ﻿@using StudentMoodle.Models
-@model UserView
+@model (UserView, List<Discipline>)
+
 @{
     ViewData["Title"] = "Home Page";
 }
 @{
-    var model = Model;
+    var model = Model.Item1;
+    var model2 = Model.Item2;
 }
 
 <div class="text-center">
     <h1 class="display-4">
-        @if (model.RoleId == RoleType.Student)
+        @if (model.RoleId == 1)
         {
             <h3>Вы выполнили вход под учётной записью студента</h3>
             <h5>@Html.DisplayFor(x => model.fullName)</h5>
@@ -42,5 +44,16 @@
             </p>
         }
     </h1>
-    
+    <div>
+        <h2>Список доступных дисциплин</h2>
+        <table class="table">
+        @foreach (var item in model2) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+        </tr>
+        }
+        </table>
+    </div>
 </div>
