@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Views\Discipline\FormsCreate\" />
     <Folder Include="Views\Lector\" />
   </ItemGroup>
 

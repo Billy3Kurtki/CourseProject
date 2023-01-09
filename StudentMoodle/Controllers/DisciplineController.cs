@@ -56,7 +56,7 @@ namespace StudentMoodle.Controllers
         }
 
         // GET: HomeController1/Create
-        /*public ActionResult Create()
+        public ActionResult CreateTest()
         {
             return View();
         }
@@ -64,10 +64,12 @@ namespace StudentMoodle.Controllers
         // POST: HomeController1/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> CreateTest(Test test)
         {
             try
             {
+                _context.Tests.Add(test);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -77,7 +79,7 @@ namespace StudentMoodle.Controllers
         }
 
         // GET: HomeController1/Edit/5
-        public ActionResult Edit(int id)
+        /*public ActionResult Edit(int id)
         {
             return View();
         }
