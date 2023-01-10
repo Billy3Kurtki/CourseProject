@@ -134,6 +134,9 @@ namespace StudentMoodle.Models
 
                 entity.Property(e => e.status1)
                     .HasColumnName("status");
+
+                entity.Property(e => e.IdDiscipline)
+                    .HasColumnName("iddiscipline");
             });
 
             modelBuilder.Entity<LabWork>(entity =>
@@ -146,19 +149,22 @@ namespace StudentMoodle.Models
                 entity.ToTable("labwork");
 
                 entity.Property(e => e.Id)
-                    .HasColumnName("idLabWork");
+                    .HasColumnName("idlabwork");
 
                 entity.Property(e => e.Title)
                     .HasColumnName("title");
 
                 entity.Property(e => e.DeadLine)
                     .HasColumnName("deadline");
-
-                entity.Property(e => e.status1)
+                                
+                entity.Property(e => e.Manual)
                     .HasColumnName("manual");
 
                 entity.Property(e => e.status1)
                     .HasColumnName("status");
+
+                entity.Property(e => e.IdDiscipline)
+                    .HasColumnName("iddiscipline");
             });
 
             modelBuilder.Entity<Score>(entity =>

@@ -7,35 +7,28 @@ namespace StudentMoodle.Models
         public IReadOnlyCollection<Task> tasks = new Collection<Task>();
         public IReadOnlyCollection<Student> listPassStudents = new Collection<Student>();
 
-        public enum Status
-        {
-            Open,
-            Close,
-            Passing,
-            Сhecked
-        }
-
-        public int Id { get; }
-        public string Title { get; }
-        public DateTime DeadLine { get; }
-        public Status status1 { get; set; }
-        public string Manual { get; }
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public DateTime DeadLine { get; set; }
+        public string status1 { get; set; } = "Open";
+        public string Manual { get; set; }
+        public int IdDiscipline { get; set; }
 
         public void closeTest()
         {
-            status1 = Status.Close;
+            status1 = "Close";
         }
         public void openTest()
         {
-            status1 = Status.Open;
+            status1 = "Open";
         }
         public void passingTest()
         {
-            status1 = Status.Passing;
+            status1 = "Passing";
         }
         public void checkedTest()
         {
-            status1 = Status.Сhecked;
+            status1 = "Сhecked";
         }
         
     }

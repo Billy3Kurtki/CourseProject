@@ -56,6 +56,7 @@ namespace StudentMoodle.Controllers
         }
 
         // GET: HomeController1/Create
+        [Authorize(Policy = "lector")]
         public ActionResult CreateTest()
         {
             return View();
@@ -70,7 +71,30 @@ namespace StudentMoodle.Controllers
             {
                 _context.Tests.Add(test);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Discipline");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        [Authorize(Policy = "lector")]
+        public ActionResult CreateLabWork()
+        {
+            return View();
+        }
+
+        // POST: HomeController1/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> CreateLabWork(LabWork labWork)
+        {
+            try
+            {
+                _context.LabWorks.Add(labWork);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index", "Discipline");
             }
             catch
             {
