@@ -57,9 +57,14 @@ namespace StudentMoodle.Controllers
 
         // GET: HomeController1/Create
         [Authorize(Policy = "lector")]
-        public ActionResult CreateTest()
+        public async Task<ActionResult> CreateTest()
         {
-            return View();
+            //var model = new Discipline();
+            //var disciplines = _context.Disciplines.ToList();
+            
+            //var disciplines = await _context.Disciplines.ToListAsync();
+            //ViewBag.Disciplines = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(disciplines, "iddiscipline", "title");
+            return View("~/Views/Discipline/FormsCreate/CreateTest.cshtml");
         }
 
         // POST: HomeController1/Create
@@ -80,9 +85,9 @@ namespace StudentMoodle.Controllers
         }
 
         [Authorize(Policy = "lector")]
-        public ActionResult CreateLabWork()
+        public async Task<ActionResult> CreateLabWork()
         {
-            return View();
+            return View("~/Views/Discipline/CreateTest.cshtml");
         }
 
         // POST: HomeController1/Create

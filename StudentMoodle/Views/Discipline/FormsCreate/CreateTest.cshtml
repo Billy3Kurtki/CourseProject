@@ -1,8 +1,10 @@
-﻿@model StudentMoodle.Models.Test
+﻿@using static StudentMoodle.Models.Test;
+@model StudentMoodle.Models.Test
 
 @{
     ViewData["Title"] = "CreateTest";
 }
+
 
 <h1>CreateTest</h1>
 
@@ -24,12 +26,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="status1" class="control-label"></label>
-                <input asp-for="status1" class="form-control" />
+                @Html.DropDownList("status1", Html.GetEnumSelectList(typeof(Status)))
                 <span asp-validation-for="status1" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="IdDiscipline" class="control-label"></label>
-                <input asp-for="IdDiscipline" class="form-control" />
+                @*<input asp-for="IdDiscipline" class="form-control" />*@
                 <span asp-validation-for="IdDiscipline" class="text-danger"></span>
             </div>
             <div class="form-group">
