@@ -87,7 +87,7 @@ namespace StudentMoodle.Controllers
         [Authorize(Policy = "lector")]
         public async Task<ActionResult> CreateLabWork()
         {
-            return View("~/Views/Discipline/CreateTest.cshtml");
+            return View("~/Views/Discipline/FormsCreate/CreateLabWork.cshtml");
         }
 
         // POST: HomeController1/Create
