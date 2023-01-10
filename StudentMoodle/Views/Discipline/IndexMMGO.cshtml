@@ -1,13 +1,11 @@
 ﻿@using StudentMoodle.Models
-@model (UserView, List<Discipline>)
+@model (List<LabWork>, UserView)
 
 @{
-    ViewData["Title"] = "Home Page";
-}
-@{
-    var model = Model.Item1;
+    var model1 = Model.Item1;
     var model2 = Model.Item2;
 }
+
 
 <div class="text-center">
     <h1 class="display-4">
@@ -24,4 +22,31 @@
                                  onclick="location.href='@Url.Action("Index", "Discipline")'" />
         </p>
     
+        <div>
+        <table class="table">
+            @foreach (var item in model1)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        <td>
+                        @if (model2.RoleId != 1) {
+                            <input type="button" value="Edit"
+                                onclick="location.href='@Url.Action($"LabWorkEdit", "Discipline", item)'" />
+                        }
+                            <input type="button" value="Details"
+                                onclick="location.href='@Url.Action($"LabWorkDetails", "Discipline", item)'" />
+                        @if (model2.RoleId != 1) {
+                            <input type="button" value="Delete"
+                                onclick="location.href='@Url.Action($"LabWorkDelete", "Discipline", item)'" />
+                        }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        </div>
+
+
 </div>

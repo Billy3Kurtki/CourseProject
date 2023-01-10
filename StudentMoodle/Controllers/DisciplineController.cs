@@ -36,7 +36,14 @@ namespace StudentMoodle.Controllers
         }
         public ActionResult IndexMMGO()
         {
-            return View();
+            var labWorks = _context.LabWorks.Where(l => l.IdDiscipline == 1).ToList();
+            ClaimsPrincipal claimUser = HttpContext.User;
+            var currentUserName = claimUser.Identity.Name;
+            var user = _context.Users.First(u => u.Email == currentUserName);
+            var model = (
+                labWorks,
+                user);
+            return View(model);
         }
 
         public ActionResult IndexTP()
@@ -105,6 +112,11 @@ namespace StudentMoodle.Controllers
             {
                 return View();
             }
+        }
+
+        public ActionResult LabWorkDetails(LabWork labWork)
+        {
+            return View(labWork);
         }
 
         // GET: HomeController1/Edit/5

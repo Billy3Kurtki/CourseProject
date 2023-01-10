@@ -1,0 +1,53 @@
+﻿@model LabWork
+
+
+<h1>Информация о лабораторной работе</h1>
+
+<table class="table">
+    <tbody>
+    <tr>
+            <td>
+                @Html.DisplayNameFor(model => model.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.Title)
+            </td>
+    </tr>
+        <tr>
+            <td>
+                @Html.DisplayNameFor(model => model.DeadLine)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.DeadLine)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.DisplayNameFor(model => model.status1)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.status1)
+            </td>
+    </tr>
+        <tr>
+            <td>
+                @Html.DisplayNameFor(model => model.Manual)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.Manual)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Ответ в виде файла
+            </td>
+            <td>
+            <input type="file" name="uploadedFile" />
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<input type="button" value="Дисциплины"
+       onclick="location.href='@Url.Action($"Index2", "Home")'" />
+
