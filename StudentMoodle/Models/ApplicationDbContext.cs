@@ -124,10 +124,10 @@ namespace StudentMoodle.Models
                 entity.ToTable("test");
 
                 entity.Property(e => e.Id)
-                    .HasColumnName("id");
+                    .HasColumnName("idtest");
 
                 entity.Property(e => e.Title)
-                    .HasColumnName("Title");
+                    .HasColumnName("title");
 
                 entity.Property(e => e.DeadLine)
                     .HasColumnName("deadLine");

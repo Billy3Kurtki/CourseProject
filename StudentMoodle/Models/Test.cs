@@ -16,9 +16,9 @@ namespace StudentMoodle.Models
             Сhecked
         }
 
-        public int Id { get; }
-        public string Title { get; }
-        public DateTime DeadLine { get; }
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public DateTime DeadLine { get; set; }
         public Status status1 { get; set; }
 
         /*public Test(int Id, string Title, DateTime DeadLine, IReadOnlyCollection<Task> tasks)
