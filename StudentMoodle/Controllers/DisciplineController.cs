@@ -21,18 +21,59 @@ namespace StudentMoodle.Controllers
 
         public ActionResult Index()
         {
+            var disciplines = new List<Discipline>();
             ClaimsPrincipal claimUser = HttpContext.User;
             var currentUserName = claimUser.Identity.Name;
             var user = _context.Users.First(u => u.Email == currentUserName);
-            var lector = _context.Lectors.First(l => l.Id == user.Id);
-            if (lector != null)
+            if (user.RoleId == 2)
             {
-                var disciplines = _context.Disciplines.Where(d => d.IdLector == user.Id).ToList();
-                return View(disciplines);
+                var lector = _context.Lectors.First(l => l.Id == user.Id);
+                if (lector != null)
+                {
+                    disciplines = _context.Disciplines.Where(d => d.IdLector == user.Id).ToList();
+                }
             }
 
-            return RedirectToAction("Index", "Home");
-            
+            if(user.RoleId == 1)
+            {
+                var student = _context.Students.First(s => s.Id == user.Id);
+                var group_discplines = _context.Group_Disciplines.Where(g => g.Idgroup == student.IdGroup).ToList();
+                foreach (var item in group_discplines)
+                {
+                    disciplines.Add(_context.Disciplines.First(d => d.Id == item.Iddiscipline));
+                }
+            }
+            var discipline1 = new Discipline();
+            var model = (
+                disciplines,
+                user,
+                discipline1
+                );
+            return View(model);
+
+        }
+
+        [Authorize(Policy = "lector")]
+        public async Task<ActionResult> Create()
+        {
+            return View();
+        }
+
+        // POST: HomeController1/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Create(Discipline discipline)
+        {
+            try
+            {
+                _context.Disciplines.Add(discipline);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index", "Discipline");
+            }
+            catch
+            {
+                return View();
+            }
         }
         public ActionResult IndexDiscipline(Discipline discipline)
         {
@@ -53,6 +94,74 @@ namespace StudentMoodle.Controllers
         public ActionResult Details(int id)
         {
             return View(_context.Disciplines.First(x => x.Id == id));
+        }
+
+        // GET: HomeController1/Edit/5
+        public async Task<ActionResult> Edit(int id)
+        {
+            if (id == null || _context.Disciplines == null)
+            {
+                return NotFound();
+            }
+
+            var disciplines = await _context.Disciplines.FindAsync(id);
+            if (disciplines == null)
+            {
+                return NotFound();
+            }
+            return View(disciplines);
+        }
+
+        // POST: HomeController1/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit(int? id, Discipline discipline)
+        {
+            try
+            {
+                _context.Disciplines.Update(discipline);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index", "Discipline");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        // GET: HomeController1/Delete/5
+        public async Task<ActionResult> Delete(int id)
+        {
+            if (id == null || _context.Disciplines == null)
+            {
+                return NotFound();
+            }
+
+            var discipline = await _context.Disciplines
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (discipline == null)
+            {
+                return NotFound();
+            }
+
+            return View(discipline);
+        }
+
+        // POST: HomeController1/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Delete(int? id, Discipline discipline)
+        {
+            try
+            {
+                _context.Disciplines.Remove(discipline);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index", "Discipline");
+            }
+            catch
+            {
+                return View();
+            }
         }
 
         // GET: HomeController1/Create
@@ -248,48 +357,5 @@ namespace StudentMoodle.Controllers
                 return View();
             }
         }
-
-
-        // GET: HomeController1/Edit/5
-        /*public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: HomeController1/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: HomeController1/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: HomeController1/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }*/
     }
 }

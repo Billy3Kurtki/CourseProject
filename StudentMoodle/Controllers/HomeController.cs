@@ -29,7 +29,6 @@ namespace StudentMoodle.Controllers
             {
                 var student = _context.Students.First(s => s.Id == user.Id);
                 var group_discplines = _context.Group_Disciplines.Where(g => g.Idgroup == student.IdGroup).ToList();
-                //disciplines = _context.Disciplines.Where(s => s.Id == group_discplines.Iddiscipline).ToList();
                 foreach (var item in group_discplines)
                 {
                     disciplines.Add(_context.Disciplines.First(d => d.Id == item.Iddiscipline));

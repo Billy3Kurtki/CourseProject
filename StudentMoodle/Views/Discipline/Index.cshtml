@@ -1,25 +1,32 @@
-﻿@model IEnumerable<StudentMoodle.Models.Discipline>
-
+﻿@model (List<Discipline>, UserView, Discipline)
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Дисциплины</h1>
+@{
+    var model = Model.Item1;
+    var model2 = Model.Item2;
+    var model3 = Model.Item3;
+}
 
+<h1>Дисциплины</h1>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Id)
+                @Html.DisplayNameFor(model => model3.Id)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Title)
+                @Html.DisplayNameFor(model => model3.Title)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in model) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Id)
@@ -28,7 +35,16 @@
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
             <td>
-                    @Html.ActionLink("Details", "IndexDiscipline", item)
+                @if (model2.RoleId == 2)
+                {
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+                }
+                @Html.ActionLink("Details", "IndexDiscipline", item) 
+                @if (model2.RoleId == 2)
+                {
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                }
+                    
             </td>
         </tr>
 }
