@@ -1,15 +1,16 @@
 ﻿@using StudentMoodle.Models
-@model (List<LabWork>, UserView)
+@model (List<LabWork>, UserView, Discipline)
 
 @{
     var model1 = Model.Item1;
     var model2 = Model.Item2;
+    var model3 = Model.Item3;
 }
 
 
 <div class="text-center">
     <h1 class="display-4">
-        <h3>Дисциплина ММГО</h3>
+        <h3>Дисциплина @model3.Title</h3>
     </h1>
 
 
@@ -33,13 +34,13 @@
                         <td>
                         @if (model2.RoleId != 1) {
                             <input type="button" value="Edit"
-                                onclick="location.href='@Url.Action($"LabWorkEdit", "Discipline", item)'" />
+                                onclick="location.href='@Url.Action($"LabWorkEdit", "Discipline", new {id = item.Id})'" />
                         }
                             <input type="button" value="Details"
                                 onclick="location.href='@Url.Action($"LabWorkDetails", "Discipline", item)'" />
                         @if (model2.RoleId != 1) {
                             <input type="button" value="Delete"
-                                onclick="location.href='@Url.Action($"LabWorkDelete", "Discipline", item)'" />
+                                onclick="location.href='@Url.Action($"LabWorkDelete", "Discipline", new {id = item.Id})'" />
                         }
                         </td>
                     </tr>

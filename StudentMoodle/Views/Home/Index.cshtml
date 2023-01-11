@@ -55,7 +55,7 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.Title)
                             <input type="button" value="Index"
-                           onclick="location.href='@Url.Action($"Index{item.Title}", "Discipline")'" />
+                           onclick="location.href='@Url.Action($"IndexDiscipline", "Discipline", item)'" />
                         </td>
                     </tr>
                 }

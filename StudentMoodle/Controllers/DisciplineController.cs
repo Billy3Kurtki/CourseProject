@@ -34,26 +34,17 @@ namespace StudentMoodle.Controllers
             return RedirectToAction("Index", "Home");
             
         }
-        public ActionResult IndexMMGO()
+        public ActionResult IndexDiscipline(Discipline discipline)
         {
-            var labWorks = _context.LabWorks.Where(l => l.IdDiscipline == 1).ToList();
+            var labWorks = _context.LabWorks.Where(l => l.IdDiscipline == discipline.Id).ToList();
             ClaimsPrincipal claimUser = HttpContext.User;
             var currentUserName = claimUser.Identity.Name;
             var user = _context.Users.First(u => u.Email == currentUserName);
             var model = (
                 labWorks,
-                user);
+                user,
+                discipline);
             return View(model);
-        }
-
-        public ActionResult IndexTP()
-        {
-            return View();
-        }
-
-        public ActionResult IndexRPS()
-        {
-            return View();
         }
 
         // GET: HomeController1/Details/5
@@ -117,6 +108,72 @@ namespace StudentMoodle.Controllers
         public ActionResult LabWorkDetails(LabWork labWork)
         {
             return View(labWork);
+        }
+
+        public async Task<IActionResult> LabWorkEdit(int? id)
+        {
+            if (id == null || _context.LabWorks == null)
+            {
+                return NotFound();
+            }
+
+            var labWork = await _context.LabWorks.FindAsync(id);
+            if (labWork == null)
+            {
+                return NotFound();
+            }
+            return View(labWork);
+        }
+
+        // POST: StudentController/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> LabWorkEdit(int id, LabWork labWork)
+        {
+            try
+            {
+                _context.LabWorks.Update(labWork);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index2", "Home");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        public async Task<IActionResult> LabWorkDelete(int? id)
+        {
+            if (id == null || _context.LabWorks == null)
+            {
+                return NotFound();
+            }
+
+            var labWork = await _context.LabWorks
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (labWork == null)
+            {
+                return NotFound();
+            }
+
+            return View(labWork);
+        }
+
+        // POST: StudentController/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> LabWorkDelete(int id, LabWork labWork)
+        {
+            try
+            {
+                _context.LabWorks.Remove(labWork);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index2", "Home");
+            }
+            catch
+            {
+                return View();
+            }
         }
 
         // GET: HomeController1/Edit/5
