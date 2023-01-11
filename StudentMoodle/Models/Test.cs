@@ -6,7 +6,7 @@ namespace StudentMoodle.Models
 {
     public class Test
     {
-        public IReadOnlyCollection<Task> tasks = new Collection<Task>();
+        public IReadOnlyCollection<Tasks> tasks = new Collection<Tasks>();
         public IReadOnlyCollection<Student> listPassStudents = new Collection<Student>();
 
         public enum Status

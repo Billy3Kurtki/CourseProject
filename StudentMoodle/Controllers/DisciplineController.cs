@@ -97,6 +97,7 @@ namespace StudentMoodle.Controllers
         }
 
         // GET: HomeController1/Edit/5
+        [Authorize(Policy = "lector")]
         public async Task<ActionResult> Edit(int id)
         {
             if (id == null || _context.Disciplines == null)
@@ -130,6 +131,7 @@ namespace StudentMoodle.Controllers
         }
 
         // GET: HomeController1/Delete/5
+        [Authorize(Policy = "lector")]
         public async Task<ActionResult> Delete(int id)
         {
             if (id == null || _context.Disciplines == null)
@@ -230,6 +232,7 @@ namespace StudentMoodle.Controllers
             }
         }
 
+        [Authorize(Policy = "lector")]
         public async Task<IActionResult> TestDelete(int? id)
         {
             if (id == null || _context.Tests == null)
@@ -324,6 +327,7 @@ namespace StudentMoodle.Controllers
             }
         }
 
+        [Authorize(Policy = "lector")]
         public async Task<IActionResult> LabWorkDelete(int? id)
         {
             if (id == null || _context.LabWorks == null)

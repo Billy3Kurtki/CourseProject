@@ -4,7 +4,7 @@ namespace StudentMoodle.Models
 {
     public class LabWork
     {
-        public IReadOnlyCollection<Task> tasks = new Collection<Task>();
+        public IReadOnlyCollection<Tasks> tasks = new Collection<Tasks>();
         public IReadOnlyCollection<Student> listPassStudents = new Collection<Student>();
 
         public int Id { get; set; }

@@ -16,7 +16,7 @@ namespace StudentMoodle.Models
         public DbSet<Test> Tests { get; set; } = default!;
         public DbSet<LabWork> LabWorks { get; set; } = default!;
         public DbSet<Score> Scores { get; set; } = default!;
-        public DbSet<Task> Tasks { get; set; } = default!;
+        public DbSet<Tasks> Tasks { get; set; } = default!;
         public DbSet<Answer> Answers { get; set; } = default!;
         public DbSet<Group_Discipline> Group_Disciplines { get; set; } = default!;
 
@@ -189,7 +189,7 @@ namespace StudentMoodle.Models
                     .HasColumnName("score");
             });
 
-            modelBuilder.Entity<Task>(entity =>
+            modelBuilder.Entity<Tasks>(entity =>
             {
                 entity.HasKey(e => new
                 {
