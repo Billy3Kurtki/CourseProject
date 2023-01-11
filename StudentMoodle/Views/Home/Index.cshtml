@@ -15,6 +15,7 @@
         {
             <h3>Вы выполнили вход под учётной записью студента</h3>
             <h5>@Html.DisplayFor(x => model.fullName)</h5>
+            @Html.ActionLink("Список дисциплин", "Index", "Discipline")
         }
 
         @if (model.RoleId == 2)
@@ -23,8 +24,10 @@
             <h5>@Html.DisplayFor(x => model.fullName)</h5><br />
 
             <p>
-                Список дисциплин: <input type="button" value="Index"
-                   onclick="location.href='@Url.Action("Index", "Discipline")'" />
+                
+                @Html.ActionLink("Список дисциплин", "Index", "Discipline")
+                @*Список дисциплин: <input type="button" value="Index"
+                   onclick="location.href='@Url.Action("Index", "Discipline")'" />*@
             </p>
         }
 
@@ -44,7 +47,7 @@
             </p>
         }
     </h1>
-    @if (model.RoleId == 1 || model.RoleId == 2)
+    @*@if (model.RoleId == 1 || model.RoleId == 2)
     {
         <div>
             <h2>Список доступных дисциплин</h2>
@@ -61,5 +64,5 @@
                 }
             </table>
         </div>
-    }
+    }*@
 </div>

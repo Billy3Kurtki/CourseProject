@@ -37,13 +37,15 @@ namespace StudentMoodle.Controllers
         public ActionResult IndexDiscipline(Discipline discipline)
         {
             var labWorks = _context.LabWorks.Where(l => l.IdDiscipline == discipline.Id).ToList();
+            var tests = _context.Tests.Where(t => t.IdDiscipline == discipline.Id).ToList();
             ClaimsPrincipal claimUser = HttpContext.User;
             var currentUserName = claimUser.Identity.Name;
             var user = _context.Users.First(u => u.Email == currentUserName);
             var model = (
                 labWorks,
                 user,
-                discipline);
+                discipline,
+                tests);
             return View(model);
         }
 
@@ -62,7 +64,7 @@ namespace StudentMoodle.Controllers
             
             //var disciplines = await _context.Disciplines.ToListAsync();
             //ViewBag.Disciplines = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(disciplines, "iddiscipline", "title");
-            return View("~/Views/Discipline/FormsCreate/CreateTest.cshtml");
+            return View("~/Views/Discipline/FormsCreate/TestCreate/CreateTest.cshtml");
         }
 
         // POST: HomeController1/Create
@@ -82,10 +84,81 @@ namespace StudentMoodle.Controllers
             }
         }
 
+        public ActionResult TestDetails(Test test)
+        {
+            return View("~/Views/Discipline/FormsCreate/TestCreate/TestDetails.cshtml", test);
+        }
+
+        public async Task<IActionResult> TestEdit(int? id)
+        {
+            if (id == null || _context.Tests == null)
+            {
+                return NotFound();
+            }
+
+            var test = await _context.Tests.FindAsync(id);
+            if (test == null)
+            {
+                return NotFound();
+            }
+            return View("~/Views/Discipline/FormsCreate/TestCreate/TestEdit.cshtml", test);
+        }
+
+        // POST: StudentController/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> TestEdit(int id, Test test)
+        {
+            try
+            {
+                _context.Tests.Update(test);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index", "Discipline");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        public async Task<IActionResult> TestDelete(int? id)
+        {
+            if (id == null || _context.Tests == null)
+            {
+                return NotFound();
+            }
+
+            var labWork = await _context.Tests
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (labWork == null)
+            {
+                return NotFound();
+            }
+
+            return View("~/Views/Discipline/FormsCreate/TestCreate/TestDelete.cshtml", labWork);
+        }
+
+        // POST: StudentController/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> TestDelete(int id, Test test)
+        {
+            try
+            {
+                _context.Tests.Remove(test);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index", "Discipline");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
         [Authorize(Policy = "lector")]
         public async Task<ActionResult> CreateLabWork()
         {
-            return View("~/Views/Discipline/FormsCreate/CreateLabWork.cshtml");
+            return View("~/Views/Discipline/FormsCreate/LabWorkCreate/CreateLabWork.cshtml");
         }
 
         // POST: HomeController1/Create
@@ -107,7 +180,7 @@ namespace StudentMoodle.Controllers
 
         public ActionResult LabWorkDetails(LabWork labWork)
         {
-            return View(labWork);
+            return View("~/Views/Discipline/FormsCreate/LabWorkCreate/LabWorkDetails.cshtml", labWork);
         }
 
         public async Task<IActionResult> LabWorkEdit(int? id)
@@ -122,7 +195,7 @@ namespace StudentMoodle.Controllers
             {
                 return NotFound();
             }
-            return View(labWork);
+            return View("~/Views/Discipline/FormsCreate/LabWorkCreate/LabWorkEdit.cshtml", labWork);
         }
 
         // POST: StudentController/Edit/5
@@ -134,7 +207,7 @@ namespace StudentMoodle.Controllers
             {
                 _context.LabWorks.Update(labWork);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index2", "Home");
+                return RedirectToAction("Index", "Discipline");
             }
             catch
             {
@@ -156,7 +229,7 @@ namespace StudentMoodle.Controllers
                 return NotFound();
             }
 
-            return View(labWork);
+            return View("~/Views/Discipline/FormsCreate/LabWorkCreate/LabWorkDelete.cshtml", labWork);
         }
 
         // POST: StudentController/Delete/5
@@ -168,13 +241,14 @@ namespace StudentMoodle.Controllers
             {
                 _context.LabWorks.Remove(labWork);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index2", "Home");
+                return RedirectToAction("Index", "Discipline");
             }
             catch
             {
                 return View();
             }
         }
+
 
         // GET: HomeController1/Edit/5
         /*public ActionResult Edit(int id)
