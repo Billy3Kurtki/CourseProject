@@ -1,0 +1,40 @@
+﻿@model StudentMoodle.Models.Tasks
+
+@{
+    ViewData["Title"] = "EditTask";
+}
+
+<h1>EditTask</h1>
+
+<h4>Tasks</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditTask">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="idTest" class="control-label"></label>
+                <input asp-for="idTest" class="form-control" />
+                <span asp-validation-for="idTest" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <input type="button" value="Назад к вопросам"
+           onclick="location.href='@Url.Action("TasksIndex", "Test", new {id = Model.idTest})'" />
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

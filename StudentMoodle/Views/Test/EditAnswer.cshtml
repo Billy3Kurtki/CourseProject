@@ -1,0 +1,45 @@
+﻿@model StudentMoodle.Models.Answer
+
+@{
+    ViewData["Title"] = "EditAnswer";
+}
+
+<h1>EditAnswer</h1>
+
+<h4>Answer</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditAnswer">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="isRight" /> @Html.DisplayNameFor(model => model.isRight)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="idTask" class="control-label"></label>
+                <input asp-for="idTask" class="form-control" />
+                <span asp-validation-for="idTask" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <input type="button" value="Назад к ответам"
+           onclick="location.href='@Url.Action("AnswerIndex", "Test", new {id = Model.idTask})'" />
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -164,19 +164,31 @@ namespace StudentMoodle.Controllers
         }
 
         // GET: TestController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> EditAnswer(int id)
         {
-            return View();
+            if (id == null || _context.Answers == null)
+            {
+                return NotFound();
+            }
+
+            var answer = await _context.Answers.FindAsync(id);
+            if (answer == null)
+            {
+                return NotFound();
+            }
+            return View(answer);
         }
 
         // POST: TestController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult EditAnswer(int id, Answer answer)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                _context.Answers.Update(answer);
+                _context.SaveChanges();
+                return RedirectToAction("AnswerIndex", "Test", new { idtask = answer.idTask });
             }
             catch
             {
@@ -184,20 +196,105 @@ namespace StudentMoodle.Controllers
             }
         }
 
-        // GET: TestController/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<IActionResult> AnswerDelete(int? id)
         {
-            return View();
+            if (id == null || _context.Answers == null)
+            {
+                return NotFound();
+            }
+
+            var answer = await _context.Answers
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (answer == null)
+            {
+                return NotFound();
+            }
+
+            return View(answer);
         }
 
-        // POST: TestController/Delete/5
+        // POST: StudentController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<IActionResult> AnswerDelete(int id, Answer answer)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+
+                answer = _context.Answers.Find(id);
+                var idTask = answer.idTask;
+                _context.Answers.Remove(answer);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("AnswerIndex", "Test", new { id = idTask });
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        public async Task<ActionResult> EditTask(int id)
+        {
+            if (id == null || _context.Tasks == null)
+            {
+                return NotFound();
+            }
+
+            var task = await _context.Tasks.FindAsync(id);
+            if (task == null)
+            {
+                return NotFound();
+            }
+            return View(task);
+        }
+
+        // POST: TestController/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditTask(int id, Tasks task)
+        {
+            try
+            {
+                _context.Tasks.Update(task);
+                _context.SaveChanges();
+                return RedirectToAction("TasksIndex", "Test", new { idtest = task.idTest });
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        public async Task<IActionResult> DeleteTask(int? id)
+        {
+            if (id == null || _context.Tasks == null)
+            {
+                return NotFound();
+            }
+
+            var task = await _context.Tasks
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (task == null)
+            {
+                return NotFound();
+            }
+
+            return View(task);
+        }
+
+        // POST: StudentController/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteTask(int id, Tasks task)
+        {
+            try
+            {
+
+                task = _context.Tasks.Find(id);
+                var idTest = task.idTest;
+                _context.Tasks.Remove(task);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("TasksIndex", "Test", new { id = idTest });
             }
             catch
             {

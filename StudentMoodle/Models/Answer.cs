@@ -2,7 +2,7 @@
 {
     public class Answer
     {
-        public int Id { get; }
+        public int Id { get; set; }
         public string Title { get; set; }
         public bool isRight { get; set; }
 

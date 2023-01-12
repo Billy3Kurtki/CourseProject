@@ -12,7 +12,7 @@
 <h1>Тест @model2.Title</h1>
 <h4>Вопросы</h4>
 <p>
-    <input type="button" value="Создать задание"
+    <input type="button" value="Создать вопрос"
            onclick="location.href='@Url.Action("TasksCreate", "Test", new {testkey = model2.Id})'" />
 </p>
 <table class="table">
@@ -38,9 +38,9 @@
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
             <td>
-                @Html.ActionLink("Варианты ответов", "AnswerIndex", new {  idtask = item.Id }) @*|
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
+                @Html.ActionLink("Варианты ответов", "AnswerIndex", new {  idtask = item.Id }) |
+                @Html.ActionLink("Edit", "EditTask", new {  id=item.Id  }) |
+                @Html.ActionLink("Delete", "DeleteTask", new {  id=item.Id  })
             </td>
         </tr>
 }
