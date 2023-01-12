@@ -261,14 +261,14 @@ namespace StudentMoodle.Controllers
                 return NotFound();
             }
 
-            var labWork = await _context.Tests
+            var test = await _context.Tests
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (labWork == null)
+            if (test == null)
             {
                 return NotFound();
             }
 
-            return View("~/Views/Discipline/FormsCreate/TestCreate/TestDelete.cshtml", labWork);
+            return View("~/Views/Discipline/FormsCreate/TestCreate/TestDelete.cshtml", test);
         }
 
         // POST: StudentController/Delete/5
@@ -278,10 +278,11 @@ namespace StudentMoodle.Controllers
         {
             try
             {
-                //var idDiscipline = _context.Tests.Find(id).IdDiscipline;
+                test = _context.Tests.Find(id);
+                var idDiscipline = test.IdDiscipline;
                 _context.Tests.Remove(test);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index", "Discipline"/*, new { id = idDiscipline }*/);
+                return RedirectToAction("IndexDiscipline", "Discipline", new { id = idDiscipline });
             }
             catch
             {
@@ -391,9 +392,12 @@ namespace StudentMoodle.Controllers
         {
             try
             {
+                
+                labWork = _context.LabWorks.Find(id);
+                var idDiscipline = labWork.IdDiscipline;
                 _context.LabWorks.Remove(labWork);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index", "Discipline");
+                return RedirectToAction("IndexDiscipline", "Discipline", new { id = idDiscipline });
             }
             catch
             {
