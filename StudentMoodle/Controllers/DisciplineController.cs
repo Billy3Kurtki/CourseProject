@@ -208,7 +208,7 @@ namespace StudentMoodle.Controllers
             {
                 _context.Tests.Add(test);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index", "Discipline");
+                return RedirectToAction("IndexDiscipline", "Discipline", new {id = test.IdDiscipline});
             }
             catch
             {
@@ -245,7 +245,7 @@ namespace StudentMoodle.Controllers
             {
                 _context.Tests.Update(test);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index", "Discipline");
+                return RedirectToAction("IndexDiscipline", "Discipline", new {id = test.IdDiscipline});
             }
             catch
             {
@@ -278,9 +278,10 @@ namespace StudentMoodle.Controllers
         {
             try
             {
+                //var idDiscipline = _context.Tests.Find(id).IdDiscipline;
                 _context.Tests.Remove(test);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index", "Discipline");
+                return RedirectToAction("Index", "Discipline"/*, new { id = idDiscipline }*/);
             }
             catch
             {
@@ -320,7 +321,7 @@ namespace StudentMoodle.Controllers
             {
                 _context.LabWorks.Add(labWork);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index", "Discipline");
+                return RedirectToAction("IndexDiscipline", "Discipline", new {id = labWork.IdDiscipline});
             }
             catch
             {
@@ -357,7 +358,7 @@ namespace StudentMoodle.Controllers
             {
                 _context.LabWorks.Update(labWork);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index", "Discipline");
+                return RedirectToAction("IndexDiscipline", "Discipline", new { id = labWork.IdDiscipline });
             }
             catch
             {
