@@ -95,14 +95,14 @@ namespace StudentMoodle.Controllers
         }
 
         // GET: HomeController1/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details(int? id)
         {
             return View(_context.Disciplines.First(x => x.Id == id));
         }
 
         // GET: HomeController1/Edit/5
         [Authorize(Policy = "lector")]
-        public async Task<ActionResult> Edit(int id)
+        public async Task<ActionResult> Edit(int? id)
         {
             if (id == null || _context.Disciplines == null)
             {
@@ -136,7 +136,7 @@ namespace StudentMoodle.Controllers
 
         // GET: HomeController1/Delete/5
         [Authorize(Policy = "lector")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult> Delete(int? id)
         {
             if (id == null || _context.Disciplines == null)
             {
@@ -190,10 +190,9 @@ namespace StudentMoodle.Controllers
             {
                 IdDiscipline = disciplines.Id
             };
-                
             //var model = new Discipline();
             //var disciplines = _context.Disciplines.ToList();
-            
+
             //var disciplines = await _context.Disciplines.ToListAsync();
             //ViewBag.Disciplines = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(disciplines, "iddiscipline", "title");
             return View("~/Views/Discipline/FormsCreate/TestCreate/CreateTest.cshtml", test);
@@ -216,9 +215,19 @@ namespace StudentMoodle.Controllers
             }
         }
 
-        public ActionResult TestDetails(Test test)
+        public ActionResult TestDetails(int? idtest, Test test)
         {
-            return View("~/Views/Discipline/FormsCreate/TestCreate/TestDetails.cshtml", test);
+            if (idtest != null)
+            {
+                test = _context.Tests.First(d => d.Id == idtest);
+            }
+            ClaimsPrincipal claimUser = HttpContext.User;
+            var currentUserName = claimUser.Identity.Name;
+            var user = _context.Users.First(u => u.Email == currentUserName);
+            var model = (
+                test,
+                user);
+            return View("~/Views/Discipline/FormsCreate/TestCreate/TestDetails.cshtml", model);
         }
 
         public async Task<IActionResult> TestEdit(int? id)

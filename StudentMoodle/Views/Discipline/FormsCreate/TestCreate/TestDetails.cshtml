@@ -1,5 +1,9 @@
-﻿@model Test
+﻿@model (Test, UserView)
 
+@{
+    var model1 = Model.Item1;
+    var model2 = Model.Item2;
+}
 
 <h1>Информация о тесте</h1>
 
@@ -7,42 +11,60 @@
     <tbody>
         <tr>
             <td>
-                @Html.DisplayNameFor(model => model.Title)
+                @Html.DisplayNameFor(model => model1.Title)
             </td>
             <td>
-                @Html.DisplayFor(model => model.Title)
+                @Html.DisplayFor(model => model1.Title)
             </td>
         </tr>
         <tr>
             <td>
-                @Html.DisplayNameFor(model => model.DeadLine)
+                @Html.DisplayNameFor(model => model1.DeadLine)
             </td>
             <td>
-                @Html.DisplayFor(model => model.DeadLine)
+                @Html.DisplayFor(model => model1.DeadLine)
             </td>
         </tr>
         <tr>
             <td>
-                @Html.DisplayNameFor(model => model.status)
+                @Html.DisplayNameFor(model => model1.status)
             </td>
             <td>
-                @Html.DisplayFor(model => model.status)
+                @Html.DisplayFor(model => model1.status)
             </td>
         </tr>
         <tr>
-            <td>
-                Начать прохождение
-            </td>
-            <td>
-                <input type="button" value="Пройти тест"
-                       onclick="location.href='@Url.Action("Index", "Test", Model)'" />
-            </td>
+            @if (model2.RoleId == 1)
+            {
+                <td>
+                    Начать прохождение
+                </td>
+                <td>
+                        <input type="button" value="Пройти тест"
+                           onclick="location.href='@Url.Action("Index", "Test", model1)'" />
+                </td>
+            }
+            @if (model2.RoleId == 2)
+            {
+                <td>
+                    Опции
+                </td>
+                <td>
+                    <input type="button" value="Редактировать тест"
+                       onclick="location.href='@Url.Action("TasksIndex", "Test", model1)'" />
+                </td>
+                <td>
+                    @*TODO*@
+                    <input type="button" value="Студенты прошедшие тест"
+                       onclick="location.href='@Url.Action("#", "#")'" />
+                </td>
+            }
         </tr>
     </tbody>
 </table>
 
 <div>
     <input type="button" value="Назад к дисциплине"
-           onclick="location.href='@Url.Action("IndexDiscipline", "Discipline", new {id = Model.IdDiscipline})'" />
+           onclick="location.href='@Url.Action("IndexDiscipline", "Discipline", new {id = model1.IdDiscipline})'" />
 </div>
 

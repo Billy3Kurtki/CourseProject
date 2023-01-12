@@ -1,23 +1,28 @@
-﻿@model StudentMoodle.Models.Tasks
+﻿@model StudentMoodle.Models.Answer
 
 @{
-    ViewData["Title"] = "TasksCreate";
+    ViewData["Title"] = "AnswerCreate";
 }
 
-<h1>TasksCreate</h1>
+<h1>AnswerCreate</h1>
 
-<h4>Tasks</h4>
+<h4>Answer</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="TasksCreate">
+        <form asp-action="AnswerCreate">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
                 <input asp-for="Title" class="form-control" />
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
-            <input type="hidden" asp-for="idTest" />
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="isRight" /> @Html.DisplayNameFor(model => model.isRight)
+                </label>
+            </div>
+            <input type="hidden" asp-for="idTask" />
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -26,8 +31,8 @@
 </div>
 
 <div>
-    <input type="button" value="Назад к заданиям"
-           onclick="location.href='@Url.Action("TasksIndex", "Test", new {idtest = Model.idTest})'" />
+    <input type="button" value="Назад к вариатам ответов"
+           onclick="location.href='@Url.Action("AnswerIndex", "Test", new {idtask = Model.idTask})'" />
 </div>
 
 @section Scripts {

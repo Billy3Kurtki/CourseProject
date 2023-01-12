@@ -1,0 +1,53 @@
+﻿@model (List<Tasks>, Test, Tasks)
+
+@{
+    ViewData["Title"] = "TaskIndex";
+}
+
+@{
+    var model1 = Model.Item1;
+    var model2 = Model.Item2;
+    var model3 = Model.Item3;
+}
+<h1>Тест @model2.Title</h1>
+<h4>Вопросы</h4>
+<p>
+    <input type="button" value="Создать задание"
+           onclick="location.href='@Url.Action("TasksCreate", "Test", new {testkey = model2.Id})'" />
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model3.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model3.Title)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in model1)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.ActionLink("Варианты ответов", "AnswerIndex", new {  idtask = item.Id }) @*|
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<p>
+    <input type="button" value="Назад к тесту"
+           onclick="location.href='@Url.Action("TestDetails", "Discipline", new {idtest = model2.Id})'" />
+</p>

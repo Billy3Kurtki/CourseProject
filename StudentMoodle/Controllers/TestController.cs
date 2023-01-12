@@ -35,6 +35,107 @@ namespace StudentMoodle.Controllers
             return View("TestForm", model);
         }
 
+        public ActionResult TasksIndex(int? idtest, Test tests)
+        {
+            if (idtest != null)
+            {
+                tests = _context.Tests.First(t => t.Id == idtest);
+            }
+            var task = _context.Tasks.Where(t => t.idTest == tests.Id).ToList();
+            var model = (
+                task,
+                tests, 
+                new Tasks());
+            return View(model);
+        }
+
+        public async Task<ActionResult> TasksCreate(int? testkey)
+        {
+            if (testkey == null || _context.Tests == null)
+            {
+                return NotFound();
+            }
+
+            var test = await _context.Tests.FindAsync(testkey);
+
+            if (test == null)
+            {
+                return NotFound();
+            }
+
+            var task = new Tasks()
+            {
+                idTest = test.Id
+            };
+            return View(task);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> TasksCreate(Tasks tasks)
+        {
+            try
+            {
+                _context.Tasks.Add(tasks);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("TasksIndex", "Test", new { idtest = tasks.idTest });
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        public ActionResult AnswerIndex(int? idtask, Tasks tasks)
+        {
+            if (idtask != null)
+            {
+                tasks = _context.Tasks.First(t => t.Id == idtask);
+            }
+            var answer = _context.Answers.Where(a => a.idTask == tasks.Id).ToList();
+            var model = (
+                answer,
+                tasks,
+                new Answer());
+            return View(model);
+        }
+
+        public async Task<ActionResult> AnswerCreate(int? tascskey)
+        {
+            if (tascskey == null || _context.Tasks == null)
+            {
+                return NotFound();
+            }
+
+            var tasks = await _context.Tasks.FindAsync(tascskey);
+
+            if (tasks == null)
+            {
+                return NotFound();
+            }
+
+            var answer = new Answer()
+            {
+                idTask = tasks.Id
+            };
+            return View(answer);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> AnswerCreate(Answer answer)
+        {
+            try
+            {
+                _context.Answers.Add(answer);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("AnswerIndex", "Test", new { idtask = answer.idTask });
+            }
+            catch
+            {
+                return View();
+            }
+        }
         // GET: TestController/Details/5
         public ActionResult Details(int id)
         {
