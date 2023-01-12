@@ -30,10 +30,10 @@
             @Html.DisplayFor(model => model.DeadLine)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.status1)
+            @Html.DisplayNameFor(model => model.status)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.status1)
+            @Html.DisplayFor(model => model.status)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.IdDiscipline)
@@ -45,6 +45,9 @@
     
     <form asp-action="TestDelete">
         <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <div>
+            <input type="button" value="Назад к дисциплине"
+                   onclick="location.href='@Url.Action("IndexDiscipline", "Discipline", new {id = Model.IdDiscipline})'" />
+        </div>
     </form>
 </div>

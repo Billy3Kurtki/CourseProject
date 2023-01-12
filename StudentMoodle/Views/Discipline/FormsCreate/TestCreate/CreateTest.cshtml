@@ -25,15 +25,11 @@
                 <span asp-validation-for="DeadLine" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="status1" class="control-label"></label>
-                @Html.DropDownList("status1", Html.GetEnumSelectList(typeof(Status)))
-                <span asp-validation-for="status1" class="text-danger"></span>
+                <label asp-for="status" class="control-label"></label>
+                @Html.DropDownList("status", Html.GetEnumSelectList(typeof(Status)))
+                <span asp-validation-for="status" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="IdDiscipline" class="control-label"></label>
-                <input asp-for="IdDiscipline" class="form-control" />
-                <span asp-validation-for="IdDiscipline" class="text-danger"></span>
-            </div>
+            <input type="hidden" asp-for="IdDiscipline" />
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -42,8 +38,8 @@
 </div>
 
 <div>
-    <input type="button" value="Back to list"
-           onclick="location.href='@Url.Action("Index", "Discipline")'" />
+    <input type="button" value="Назад к дисциплине"
+           onclick="location.href='@Url.Action("IndexDiscipline", "Discipline", new {id = Model.IdDiscipline})'" />
 </div>
 
 @section Scripts {

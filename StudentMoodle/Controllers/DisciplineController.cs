@@ -75,8 +75,12 @@ namespace StudentMoodle.Controllers
                 return View();
             }
         }
-        public ActionResult IndexDiscipline(Discipline discipline)
+        public ActionResult IndexDiscipline(int? id, Discipline discipline)
         {
+            if (id != null)
+            {
+                discipline = _context.Disciplines.First(d => d.Id == id);
+            }
             var labWorks = _context.LabWorks.Where(l => l.IdDiscipline == discipline.Id).ToList();
             var tests = _context.Tests.Where(t => t.IdDiscipline == discipline.Id).ToList();
             ClaimsPrincipal claimUser = HttpContext.User;
@@ -168,14 +172,31 @@ namespace StudentMoodle.Controllers
 
         // GET: HomeController1/Create
         [Authorize(Policy = "lector")]
-        public async Task<ActionResult> CreateTest()
+        public async Task<ActionResult> CreateTest(int? dkey)
         {
+            if (dkey == null || _context.Disciplines == null)
+            {
+                return NotFound();
+            }
+
+            var disciplines = await _context.Disciplines.FindAsync(dkey);
+
+            if (disciplines == null)
+            {
+                return NotFound();
+            }
+
+            var test = new Test()
+            {
+                IdDiscipline = disciplines.Id
+            };
+                
             //var model = new Discipline();
             //var disciplines = _context.Disciplines.ToList();
             
             //var disciplines = await _context.Disciplines.ToListAsync();
             //ViewBag.Disciplines = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(disciplines, "iddiscipline", "title");
-            return View("~/Views/Discipline/FormsCreate/TestCreate/CreateTest.cshtml");
+            return View("~/Views/Discipline/FormsCreate/TestCreate/CreateTest.cshtml", test);
         }
 
         // POST: HomeController1/Create
@@ -268,9 +289,26 @@ namespace StudentMoodle.Controllers
         }
 
         [Authorize(Policy = "lector")]
-        public async Task<ActionResult> CreateLabWork()
+        public async Task<ActionResult> CreateLabWork(int? dkey)
         {
-            return View("~/Views/Discipline/FormsCreate/LabWorkCreate/CreateLabWork.cshtml");
+            if (dkey == null || _context.Disciplines == null)
+            {
+                return NotFound();
+            }
+
+            var disciplines = await _context.Disciplines.FindAsync(dkey);
+
+            if (disciplines == null)
+            {
+                return NotFound();
+            }
+
+            var labwork = new LabWork()
+            {
+                IdDiscipline = disciplines.Id
+            };
+
+            return View("~/Views/Discipline/FormsCreate/LabWorkCreate/CreateLabWork.cshtml", labwork);
         }
 
         // POST: HomeController1/Create

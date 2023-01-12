@@ -24,9 +24,9 @@
                 <span asp-validation-for="DeadLine" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="status1" class="control-label"></label>
-                <input asp-for="status1" class="form-control" />
-                <span asp-validation-for="status1" class="text-danger"></span>
+                <label asp-for="status" class="control-label"></label>
+                <input asp-for="status" class="form-control" />
+                <span asp-validation-for="status" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="IdDiscipline" class="control-label"></label>
@@ -41,7 +41,8 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <input type="button" value="Назад к дисциплине"
+           onclick="location.href='@Url.Action("IndexDiscipline", "Discipline", new {id = Model.IdDiscipline})'" />
 </div>
 
 @section Scripts {

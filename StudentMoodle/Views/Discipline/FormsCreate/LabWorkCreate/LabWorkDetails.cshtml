@@ -23,10 +23,10 @@
         </tr>
         <tr>
             <td>
-                @Html.DisplayNameFor(model => model.status1)
+                @Html.DisplayNameFor(model => model.status)
             </td>
             <td>
-                @Html.DisplayFor(model => model.status1)
+                @Html.DisplayFor(model => model.status)
             </td>
     </tr>
         <tr>
@@ -48,6 +48,8 @@
     </tbody>
 </table>
 
-<input type="button" value="Дисциплины"
-       onclick="location.href='@Url.Action("Index", "Discipline")'" />
+<div>
+    <input type="button" value="Назад к дисциплине"
+           onclick="location.href='@Url.Action("IndexDiscipline", "Discipline", new {id = Model.IdDiscipline})'" />
+</div>
 

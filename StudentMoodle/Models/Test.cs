@@ -25,7 +25,7 @@ namespace StudentMoodle.Models
         public string Title { get; set; }
         public DateTime DeadLine { get; set; }
         //public string status1 { get; set; } = "Open";
-        public Status status1 { get; set; }
+        public Status status { get; set; }
         public int IdDiscipline { get; set; }
 
 

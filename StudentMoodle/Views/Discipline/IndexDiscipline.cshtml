@@ -18,9 +18,9 @@
         {
             <p>
                 Создать тест: <input type="button" value="Index"
-                                    onclick="location.href='@Url.Action("CreateTest", "Discipline")'" />
+                             onclick="location.href='@Url.Action("CreateTest", "Discipline", new {dkey = model3.Id})'" />
                 Создать лабораторную работу: <input type="button" value="Index"
-                                    onclick="location.href='@Url.Action("CreateLabWork", "Discipline")'" />
+                             onclick="location.href='@Url.Action("CreateLabWork", "Discipline", new {dkey = model3.Id})'" />
             </p>
         }
         <p>

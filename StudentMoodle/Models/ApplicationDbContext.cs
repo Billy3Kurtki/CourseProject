@@ -132,7 +132,7 @@ namespace StudentMoodle.Models
                 entity.Property(e => e.DeadLine)
                     .HasColumnName("deadLine");
 
-                entity.Property(e => e.status1)
+                entity.Property(e => e.status)
                     .HasColumnName("status");
 
                 entity.Property(e => e.IdDiscipline)
@@ -160,7 +160,7 @@ namespace StudentMoodle.Models
                 entity.Property(e => e.Manual)
                     .HasColumnName("manual");
 
-                entity.Property(e => e.status1)
+                entity.Property(e => e.status)
                     .HasColumnName("status");
 
                 entity.Property(e => e.IdDiscipline)
