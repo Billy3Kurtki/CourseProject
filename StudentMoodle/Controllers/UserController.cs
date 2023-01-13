@@ -132,5 +132,33 @@ namespace StudentMoodle.Controllers
                 return View();
             }
         }
+
+        [Authorize(Policy = "admin")]
+        public ActionResult StudentCreate()
+        {
+            UserView user = new UserView();
+            Student student = new Student();
+            var model = (
+                user,
+                student);
+            return View(model);
+        }
+
+        // POST: StudentController/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> StudentCreate(UserView user, Student student)
+        {
+            try
+            {
+                _context.Users.Add(user);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
     }
 }

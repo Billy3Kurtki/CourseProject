@@ -1,4 +1,4 @@
-﻿@model StudentMoodle.Models.Authorization.LoginModel;
+﻿@*@model StudentMoodle.Models.Authorization.LoginModel;
 @addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     Layout = null;
@@ -43,4 +43,49 @@
         </div>
     </form>
 </body>
-</html>
+</html>*@
+
+@model StudentMoodle.Models.Authorization.LoginModel;
+
+@{
+    ViewData["Title"] = "Войти";
+}
+
+<h1>Войти в учетную запись</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <section>
+            <form method="post" asp-controller="Account" asp-action="Login">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-floating">
+                    <input asp-for="Email" class="form-control" autocomplete="username" aria-required="true" />
+                    <label asp-for="Email" class="form-label"></label>
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <br />
+                <div class="form-floating">
+                    <input asp-for="Password" class="form-control" autocomplete="current-password" aria-required="true" />
+                    <label type="password" asp-for="Password" class="form-label"></label>
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <br />
+                <div>
+                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Войти</button>
+                </div>
+
+                <div>
+                    <p>
+                        <a asp-action="Register">Регистрация</a>
+                    </p>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -14,7 +14,8 @@
 </div>
 
 <div>
-    @foreach (var item1 in model2)
+    <form asp-action="">
+        @foreach (var item1 in model2)
     {
         @Html.DisplayFor(modelItem => item1.Title) <br />
         @foreach (var item2 in model3)
@@ -26,4 +27,6 @@
             }
         }
     }
+    </form>
+    
 </div>

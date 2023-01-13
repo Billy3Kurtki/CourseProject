@@ -10,9 +10,12 @@
 }
 
 <h1>Дисциплины</h1>
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+@if(model2.RoleId == 2)
+{
+    <p>
+        @Html.ActionLink("Create new", "Create", new { lkey = model2.Id })
+    </p>
+}
 <table class="table">
     <thead>
         <tr>

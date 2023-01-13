@@ -220,12 +220,11 @@ namespace StudentMoodle.Controllers
         {
             try
             {
-
                 answer = _context.Answers.Find(id);
                 var idTask = answer.idTask;
                 _context.Answers.Remove(answer);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("AnswerIndex", "Test", new { id = idTask });
+                return RedirectToAction("AnswerIndex", "Test", new { idtask = idTask });
             }
             catch
             {

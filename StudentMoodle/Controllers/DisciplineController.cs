@@ -54,9 +54,25 @@ namespace StudentMoodle.Controllers
         }
 
         [Authorize(Policy = "lector")]
-        public async Task<ActionResult> Create()
+        public async Task<ActionResult> Create(int? lkey)
         {
-            return View();
+            if (lkey == null || _context.Lectors == null)
+            {
+                return NotFound();
+            }
+
+            var lector = await _context.Lectors.FindAsync(lkey);
+
+            if (lector == null)
+            {
+                return NotFound();
+            }
+
+            var discipline = new Discipline()
+            {
+                IdLector = lector.Id
+            };
+            return View(discipline);
         }
 
         // POST: HomeController1/Create
