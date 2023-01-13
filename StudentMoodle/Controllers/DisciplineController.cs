@@ -413,5 +413,59 @@ namespace StudentMoodle.Controllers
                 return View();
             }
         }
+
+        public async Task<ActionResult> GroupIndex(int id)
+        {
+            var groups = _context.Group_Disciplines.Where(gd => gd.Iddiscipline == id).ToList();
+            var group = _context.Groups.ToList();
+            var listIdGroup = new List<int>();
+            
+            var listIdGroupDisc = new List<int>();
+            foreach(var item in group)
+            {
+                listIdGroup.Add(item.Id);
+            }
+            foreach (var item in groups)
+            {
+                listIdGroupDisc.Add(item.Idgroup);
+            }
+            List<int> listDontConnGroups = listIdGroup.Except(listIdGroupDisc).ToList();
+            var listGroup = new List<Group>();
+            foreach (var item in listDontConnGroups)
+            {
+                listGroup.Add(_context.Groups.First(g => g.Id == item));
+            }
+            var discipline = _context.Disciplines.First(d => d.Id == id);
+            var model = (
+                listGroup,
+                discipline,
+                new Group());
+            return View(model);
+        }
+
+        public async Task<ActionResult> ConnectGroupDiscipline(int idgroup, int iddiscipline)
+        {
+            var gd = new Group_Discipline()
+            {
+                Iddiscipline = iddiscipline,
+                Idgroup = idgroup
+            };
+            
+            _context.Group_Disciplines.Add(gd);
+            
+            var students = _context.Students.Where(st => st.IdGroup == idgroup);
+            foreach(var item in students)
+            {
+                var score = new Score()
+                {
+                    userId = item.Id,
+                    disciplineId = iddiscipline,
+                    score = 0
+                };
+                _context.Scores.Add(score);
+            }
+            await _context.SaveChangesAsync();
+            return RedirectToAction("GroupIndex", "Discipline", new {id = iddiscipline});
+        }
     }
 }

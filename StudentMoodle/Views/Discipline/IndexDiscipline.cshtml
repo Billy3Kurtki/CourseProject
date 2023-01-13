@@ -26,6 +26,8 @@
         <p>
             Список дисциплин: <input type="button" value="Index" 
                     onclick="location.href='@Url.Action("Index", "Discipline")'" />
+            Подключить группу к дисциплине: <input type="button" value="Index"
+                    onclick="location.href='@Url.Action("GroupIndex", "Discipline", new {id = model3.Id})'" />
         </p>
 
         <div>

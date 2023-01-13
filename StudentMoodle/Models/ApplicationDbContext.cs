@@ -19,6 +19,7 @@ namespace StudentMoodle.Models
         public DbSet<Tasks> Tasks { get; set; } = default!;
         public DbSet<Answer> Answers { get; set; } = default!;
         public DbSet<Group_Discipline> Group_Disciplines { get; set; } = default!;
+        public DbSet<Group> Groups { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -245,6 +246,25 @@ namespace StudentMoodle.Models
 
                 entity.Property(e => e.Iddiscipline)
                     .HasColumnName("discipline_iddiscipline");
+            });
+
+            modelBuilder.Entity<Group>(entity =>
+            {
+                entity.HasKey(e => new
+                {
+                    e.Id
+                });
+
+                entity.ToTable("group");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("idGroup");
+
+                entity.Property(e => e.Title)
+                    .HasColumnName("title");
+
+                entity.Property(e => e.speciality)
+                    .HasColumnName("speciality");
             });
         }
     }
