@@ -44,8 +44,8 @@
                 @Html.DisplayFor(modelItem => item.isRight)
             </td>
             <td>
-                @Html.ActionLink("EditAnswer", "EditAnswer", new { id=item.Id  }) |
-                @Html.ActionLink("DeleteAnswer", "AnswerDelete", new { id=item.Id  })
+                @Html.ActionLink("Редактировать ответ", "EditAnswer", new { id=item.Id  }) |
+                @Html.ActionLink("Удалить ответ", "AnswerDelete", new { id=item.Id  })
             </td>
         </tr>
 }

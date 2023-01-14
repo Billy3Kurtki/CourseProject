@@ -10,7 +10,6 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">
         @if (model.RoleId == 1)
         {
             <h3>Вы выполнили вход под учётной записью студента</h3>
@@ -36,33 +35,14 @@
             <h3>Вы выполнили вход под учётной записью администратора</h3>
             <h5>@Html.DisplayFor(x => model.fullName)</h5><br />
 
-           <p>Список пользователей: <input type="button" value="Index"
-                onclick="location.href='@Url.Action("Index", "User")'" />
-           </p>
-           <p>Список студентов: <input type="button" value="Index"
-                onclick="location.href='@Url.Action("IndexStudent", "User")'" />
+            <p>Список пользователей: <input type="button" value="Открыть"
+                    onclick="location.href='@Url.Action("Index", "User")'" />
             </p>
-           <p>Список лекторов: <input type="button" value="Index"
-                onclick="location.href='@Url.Action("IndexLector", "User")'" />
+            <p>Список студентов: <input type="button" value="Открыть"
+                    onclick="location.href='@Url.Action("IndexStudent", "User")'" />
+            </p>
+            <p>Список лекторов: <input type="button" value="Открыть"
+                    onclick="location.href='@Url.Action("IndexLector", "User")'" />
             </p>
         }
-    </h1>
-    @*@if (model.RoleId == 1 || model.RoleId == 2)
-    {
-        <div>
-            <h2>Список доступных дисциплин</h2>
-            <table class="table">
-                @foreach (var item in model2)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Title)
-                            <input type="button" value="Index"
-                           onclick="location.href='@Url.Action($"IndexDiscipline", "Discipline", item)'" />
-                        </td>
-                    </tr>
-                }
-            </table>
-        </div>
-    }*@
 </div>

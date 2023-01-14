@@ -17,16 +17,16 @@
         @if (model2.RoleId == 2)
         {
             <p>
-                Создать тест: <input type="button" value="Index"
+                Создать тест: <input type="button" value="Создать"
                              onclick="location.href='@Url.Action("CreateTest", "Discipline", new {dkey = model3.Id})'" />
-                Создать лабораторную работу: <input type="button" value="Index"
+                Создать лабораторную работу: <input type="button" value="Создать"
                              onclick="location.href='@Url.Action("CreateLabWork", "Discipline", new {dkey = model3.Id})'" />
             </p>
         }
         <p>
-            Список дисциплин: <input type="button" value="Index" 
+            Список дисциплин: <input type="button" value="Открыть" 
                     onclick="location.href='@Url.Action("Index", "Discipline")'" />
-            Подключить группу к дисциплине: <input type="button" value="Index"
+            Подключить группу к дисциплине: <input type="button" value="Открыть"
                     onclick="location.href='@Url.Action("GroupIndex", "Discipline", new {id = model3.Id})'" />
         </p>
 
@@ -41,13 +41,13 @@
                         </td>
                         <td>
                         @if (model2.RoleId != 1) {
-                            <input type="button" value="Edit"
+                            <input type="button" value="Редактировать"
                                 onclick="location.href='@Url.Action($"LabWorkEdit", "Discipline", new {id = item.Id})'" />
                         }
-                            <input type="button" value="Details"
+                            <input type="button" value="Подробнее"
                                 onclick="location.href='@Url.Action($"LabWorkDetails", "Discipline", item)'" />
                         @if (model2.RoleId != 1) {
-                            <input type="button" value="Delete"
+                            <input type="button" value="Удалить"
                                 onclick="location.href='@Url.Action($"LabWorkDelete", "Discipline", new {id = item.Id})'" />
                         }
                         </td>
@@ -68,13 +68,13 @@
                         </td>
                         <td>
                         @if (model2.RoleId != 1) {
-                            <input type="button" value="Edit"
+                            <input type="button" value="Редактировать"
                                 onclick="location.href='@Url.Action($"TestEdit", "Discipline", new {id = item.Id})'" />
                         }
-                            <input type="button" value="Details"
+                        <input type="button" value="Подробнее"
                                 onclick="location.href='@Url.Action($"TestDetails", "Discipline", item)'" />
                         @if (model2.RoleId != 1) {
-                            <input type="button" value="Delete"
+                            <input type="button" value="Удалить"
                                 onclick="location.href='@Url.Action($"TestDelete", "Discipline", new {id = item.Id})'" />
                         }
                         </td>

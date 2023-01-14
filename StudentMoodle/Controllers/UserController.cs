@@ -134,30 +134,75 @@ namespace StudentMoodle.Controllers
         }
 
         [Authorize(Policy = "admin")]
-        public ActionResult StudentCreate()
+        public ActionResult GroupStudent()
         {
-            UserView user = new UserView();
-            Student student = new Student();
-            var model = (
-                user,
-                student);
-            return View(model);
+            
+            var studentWithGr = _context.Students.ToList();
+            var idStudentwithGr = new List<int>();
+
+            var student = _context.Users.Where(s => s.RoleId == 1);
+            var idStudent = new List<int>();
+
+            foreach (var item in studentWithGr)
+                idStudentwithGr.Add(item.Id);
+
+            foreach (var item in student)
+                idStudent.Add(item.Id);
+
+            List<int> listDontConnStudent = idStudent.Except(idStudentwithGr).ToList();
+            var students = new List<UserView>();
+
+            foreach (var item in listDontConnStudent)
+                students.Add(_context.Users.First(s => s.Id == item));
+
+            ViewBag.Group = _context.Groups.Select(g => g.Title);
+            ViewBag.Student = students.Select(s => s.Email);
+            return View();
         }
 
         // POST: StudentController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> StudentCreate(UserView user, Student student)
+        public async Task<IActionResult> ConnGroupStudent()
         {
+            var groupName = Request.Form["group"].ToString();
+            var studentEmail = Request.Form["student"].ToString();
+
+            if (groupName.Length == 0|| groupName.Length == 0)
+                return RedirectToAction(nameof(GroupStudent));
+
+            var group = _context.Groups.First(g => g.Title == groupName);
+            var student = _context.Users.First(g => g.Email == studentEmail);
+
+            Student student1 = new Student()
+            {
+                Id = student.Id,
+                IdGroup = group.Id
+            };
+
+            var gd = _context.Group_Disciplines.Where(gd => gd.Idgroup == group.Id);
             try
             {
-                _context.Users.Add(user);
+                _context.Students.Add(student1);
+                _context.SaveChanges();
+                foreach (var item in gd)
+                {
+                    var score = new Score()
+                    {
+                        userId = student.Id,
+                        disciplineId = item.Iddiscipline,
+                        score = 0
+                    };
+                    _context.Scores.Add(score);
+                }
+
+                
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(GroupStudent));
             }
             catch
             {
-                return View();
+                return RedirectToAction(nameof(GroupStudent));
             }
         }
     }

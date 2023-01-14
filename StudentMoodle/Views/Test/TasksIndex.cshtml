@@ -38,9 +38,9 @@
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
             <td>
-                @Html.ActionLink("Варианты ответов", "AnswerIndex", new {  idtask = item.Id }) |
-                @Html.ActionLink("Edit", "EditTask", new {  id=item.Id  }) |
-                @Html.ActionLink("Delete", "DeleteTask", new {  id=item.Id  })
+                @Html.ActionLink("Добавить вариант ответа", "AnswerIndex", new {  idtask = item.Id }) <br>
+                @Html.ActionLink("Редактировать", "EditTask", new {  id=item.Id  }) |
+                @Html.ActionLink("Удалить", "DeleteTask", new {  id=item.Id  })
             </td>
         </tr>
 }

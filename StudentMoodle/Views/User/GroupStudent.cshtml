@@ -1,0 +1,43 @@
+﻿@model StudentMoodle.Models.GroupStudent
+
+@{
+    ViewData["Title"] = "GroupStudent";
+}
+
+<h1>Привязать студента к группе</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="ConnGroupStudent">
+            <p>
+                <label>Группы</label><br />
+                @Html.DropDownList(
+                "group",
+                new SelectList(ViewBag.Group),
+                "Выберите группу",
+                new { @class = "dropdown" })
+
+                <br /><label>Студенты:</label><br />
+                @Html.DropDownList(
+                "student",
+                new SelectList(ViewBag.Student),
+                "Выберите студента",
+                new { @class = "dropdown" })
+            </p>
+            <p>
+                <input type="submit" value="Подключить" сlass="w-80 btn btn-lg btn-primary" />
+            </p>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="IndexStudent">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
