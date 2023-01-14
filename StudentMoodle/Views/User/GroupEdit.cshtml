@@ -1,16 +1,16 @@
-﻿@model StudentMoodle.Models.Answer
+﻿@model StudentMoodle.Models.Group
 
 @{
-    ViewData["Title"] = "EditAnswer";
+    ViewData["Title"] = "GroupEdit";
 }
 
-<h1>EditAnswer</h1>
+<h1>GroupEdit</h1>
 
-<h4>Answer</h4>
+<h4>Group</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="EditAnswer">
+        <form asp-action="GroupEdit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
@@ -18,12 +18,11 @@
                 <input asp-for="Title" class="form-control" />
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="isRight" /> @Html.DisplayNameFor(model => model.isRight)
-                </label>
+            <div class="form-group">
+                <label asp-for="speciality" class="control-label"></label>
+                <input asp-for="speciality" class="form-control" />
+                <span asp-validation-for="speciality" class="text-danger"></span>
             </div>
-            <input type="hidden" asp-for="idTask" />
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
@@ -32,8 +31,7 @@
 </div>
 
 <div>
-    <input type="button" value="Назад к ответам"
-           onclick="location.href='@Url.Action("AnswerIndex", "Test", new { idtask = Model.idTask})'" />
+    <a asp-action="GroupIndex">Back to List</a>
 </div>
 
 @section Scripts {

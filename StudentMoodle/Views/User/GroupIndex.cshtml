@@ -1,0 +1,51 @@
+﻿@model IEnumerable<StudentMoodle.Models.Group>
+
+@{
+    ViewData["Title"] = "IndexGroup";
+}
+
+<h1>IndexGroup</h1>
+
+<p>
+    <a asp-action="GroupCreate">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.speciality)
+            </th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.speciality)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "GroupEdit", new {  id = item.Id  }) |
+                @Html.ActionLink("Delete", "GroupDelete", new { id = item.Id })
+            </td>
+            <td>
+                @Html.ActionLink("Подключить сдудентов", "GroupStudent", new { idG = item.Id  }) |
+                @Html.ActionLink("Отключить сдудентов", "DisconnGroupStudent", new { idG = item.Id  })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

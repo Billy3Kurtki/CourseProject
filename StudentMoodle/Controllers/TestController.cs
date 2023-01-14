@@ -136,35 +136,9 @@ namespace StudentMoodle.Controllers
                 return View();
             }
         }
-        // GET: TestController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: TestController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: TestController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
 
         // GET: TestController/Edit/5
-        public async Task<ActionResult> EditAnswer(int id)
+        public async Task<ActionResult> EditAnswer(int? id)
         {
             if (id == null || _context.Answers == null)
             {
@@ -182,7 +156,7 @@ namespace StudentMoodle.Controllers
         // POST: TestController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditAnswer(int id, Answer answer)
+        public ActionResult EditAnswer(int? id, Answer answer)
         {
             try
             {
@@ -293,7 +267,7 @@ namespace StudentMoodle.Controllers
                 var idTest = task.idTest;
                 _context.Tasks.Remove(task);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("TasksIndex", "Test", new { id = idTest });
+                return RedirectToAction("TasksIndex", "Test", new { idtest = idTest });
             }
             catch
             {

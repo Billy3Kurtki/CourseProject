@@ -206,11 +206,7 @@ namespace StudentMoodle.Controllers
             {
                 IdDiscipline = disciplines.Id
             };
-            //var model = new Discipline();
-            //var disciplines = _context.Disciplines.ToList();
-
-            //var disciplines = await _context.Disciplines.ToListAsync();
-            //ViewBag.Disciplines = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(disciplines, "iddiscipline", "title");
+            
             return View("~/Views/Discipline/FormsCreate/TestCreate/CreateTest.cshtml", test);
         }
 
@@ -430,7 +426,7 @@ namespace StudentMoodle.Controllers
             }
         }
 
-        public async Task<ActionResult> GroupIndex(int id)
+        public ActionResult ConGroupIndex(int id)
         {
             var groups = _context.Group_Disciplines.Where(gd => gd.Iddiscipline == id).ToList();
             var group = _context.Groups.ToList();
@@ -481,7 +477,52 @@ namespace StudentMoodle.Controllers
                 _context.Scores.Add(score);
             }
             await _context.SaveChangesAsync();
-            return RedirectToAction("GroupIndex", "Discipline", new {id = iddiscipline});
+            return RedirectToAction("ConGroupIndex", "Discipline", new {id = iddiscipline});
+        }
+
+        public ActionResult DisconGroupIndex(int id)
+        {
+            var groups = _context.Group_Disciplines.Where(gd => gd.Iddiscipline == id).ToList();
+
+            var listGroup = new List<Group>();
+            foreach (var item in groups)
+            {
+                listGroup.Add(_context.Groups.First(g => g.Id == item.Idgroup));
+            }
+
+            var discipline = _context.Disciplines.First(d => d.Id == id);
+
+            var model = (
+                listGroup,
+                discipline,
+                new Group());
+            return View(model);
+        }
+
+        public async Task<ActionResult> DisConnectGroupDiscipline(int idgroup, int iddiscipline)
+        {
+            var gd = new Group_Discipline()
+            {
+                Iddiscipline = iddiscipline,
+                Idgroup = idgroup
+            };
+            var students = _context.Students.Where(st => st.IdGroup == idgroup).ToList();
+            try
+            {
+                _context.Group_Disciplines.Remove(gd);
+                foreach (var item in students)
+                {
+                    var score = _context.Scores.First(s => s.userId == item.Id && s.disciplineId == iddiscipline);
+                    _context.Scores.Remove(score);
+                }
+                await _context.SaveChangesAsync();
+                return RedirectToAction("DisconGroupIndex", new { id = iddiscipline });
+            }
+            catch
+            {
+                return RedirectToAction("DisconGroupIndex", new { id = iddiscipline });
+            }
+            
         }
     }
 }

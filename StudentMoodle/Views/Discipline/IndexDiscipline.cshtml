@@ -22,12 +22,16 @@
                 Создать лабораторную работу: <input type="button" value="Создать"
                              onclick="location.href='@Url.Action("CreateLabWork", "Discipline", new {dkey = model3.Id})'" />
             </p>
+            <p>
+                Подключить группу к дисциплине: <input type="button" value="Открыть"
+                             onclick="location.href='@Url.Action("ConGroupIndex", "Discipline", new {id = model3.Id})'" />
+                Отключить группу от дисциплины: <input type="button" value="Открыть"
+                             onclick="location.href='@Url.Action("DisconGroupIndex", "Discipline", new {id = model3.Id})'" />
+            </p>
         }
         <p>
             Список дисциплин: <input type="button" value="Открыть" 
                     onclick="location.href='@Url.Action("Index", "Discipline")'" />
-            Подключить группу к дисциплине: <input type="button" value="Открыть"
-                    onclick="location.href='@Url.Action("GroupIndex", "Discipline", new {id = model3.Id})'" />
         </p>
 
         <div>

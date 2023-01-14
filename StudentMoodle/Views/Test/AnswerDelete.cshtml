@@ -40,6 +40,6 @@
     <form asp-action="AnswerDelete">
         <input type="submit" value="Delete" class="btn btn-danger" /> |
         <input type="button" value="Назад к ответам"
-               onclick="location.href='@Url.Action("AnswerIndex", "Test", new {id = Model.idTask})'" />
+               onclick="location.href='@Url.Action("AnswerIndex", "Test", new { idtask = Model.idTask})'" />
     </form>
 </div>

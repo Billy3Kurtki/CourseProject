@@ -43,6 +43,7 @@ namespace StudentMoodle.Controllers
         [Authorize(Policy = "admin")]
         public ActionResult Create()
         {
+            ViewBag.Role = _context.Roles.Select(r => r.RoleName);
             return View();
         }
 
@@ -51,8 +52,11 @@ namespace StudentMoodle.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(UserView user)
         {
+            var groupName = Request.Form["role"].ToString();
             try
             {
+                var roles = _context.Roles.First(r => r.RoleName == groupName);
+                user.RoleId = roles.Id;
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -134,9 +138,8 @@ namespace StudentMoodle.Controllers
         }
 
         [Authorize(Policy = "admin")]
-        public ActionResult GroupStudent()
+        public ActionResult GroupStudent(int? idG)
         {
-            
             var studentWithGr = _context.Students.ToList();
             var idStudentwithGr = new List<int>();
 
@@ -155,23 +158,21 @@ namespace StudentMoodle.Controllers
             foreach (var item in listDontConnStudent)
                 students.Add(_context.Users.First(s => s.Id == item));
 
-            ViewBag.Group = _context.Groups.Select(g => g.Title);
             ViewBag.Student = students.Select(s => s.Email);
-            return View();
+            return View(_context.Groups.First(g => g.Id == idG));
         }
 
-        // POST: StudentController/Create
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ConnGroupStudent()
+        public async Task<IActionResult> ConnGroupStudent(int? id)
         {
-            var groupName = Request.Form["group"].ToString();
             var studentEmail = Request.Form["student"].ToString();
 
-            if (groupName.Length == 0|| groupName.Length == 0)
-                return RedirectToAction(nameof(GroupStudent));
+            if (id == 0|| studentEmail.Length == 0)
+                return RedirectToAction(nameof(GroupIndex));
 
-            var group = _context.Groups.First(g => g.Title == groupName);
+            var group = _context.Groups.First(g => g.Id == id);
             var student = _context.Users.First(g => g.Email == studentEmail);
 
             Student student1 = new Student()
@@ -198,11 +199,157 @@ namespace StudentMoodle.Controllers
 
                 
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(GroupStudent));
+                return RedirectToAction("GroupStudent", new { idG = id });
             }
             catch
             {
-                return RedirectToAction(nameof(GroupStudent));
+                ViewData["ValidateMessage"] = "user not found";
+                return RedirectToAction("GroupStudent", new { idG = id });
+            }
+        }
+
+
+        [Authorize(Policy = "admin")]
+        public ActionResult DisconnGroupStudent(int? idG)
+        {
+            var students = _context.Students.Where(s => s.IdGroup == idG).ToList();
+
+            var student = new List<UserView>();
+            foreach (var item in students)
+                student.Add(_context.Users.First(u => u.Id == item.Id));
+
+            ViewBag.Student = student.Select(s => s.Email);
+            return View(_context.Groups.First(g => g.Id == idG));
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DisConnGroupStudent(int? id)
+        {
+            var studentEmail = Request.Form["student"].ToString();
+
+            if (id == 0 || studentEmail.Length == 0)
+                return RedirectToAction(nameof(GroupIndex));
+
+            var group = _context.Groups.First(g => g.Id == id);
+            var student = _context.Users.First(g => g.Email == studentEmail);
+
+            Student student1 = new Student()
+            {
+                Id = student.Id,
+                IdGroup = group.Id
+            };
+
+            var gd = _context.Group_Disciplines.Where(gd => gd.Idgroup == group.Id);
+            try
+            {
+                _context.Students.Remove(student1);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("DisconnGroupStudent", new { idG = id });
+            }
+            catch
+            {
+                ViewData["ValidateMessage"] = "user not found";
+                return RedirectToAction("DisconnGroupStudent", new { idG = id });
+            }
+        }
+
+        public ActionResult GroupIndex()
+        {
+            return View(_context.Groups.ToList());
+        }
+
+        [Authorize(Policy = "admin")]
+        public ActionResult GroupCreate()
+        {
+            return View();
+        }
+
+        // POST: StudentController/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> GroupCreate(Group group)
+        {
+            try
+            {
+                _context.Groups.Add(group);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(GroupIndex));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        // GET: StudentController/Edit/5
+        [Authorize(Policy = "lector")]
+        public async Task<IActionResult> GroupEdit(int? id)
+        {
+            if (id == null || _context.Groups == null)
+            {
+                return NotFound();
+            }
+
+            var group = await _context.Groups.FindAsync(id);
+            if (group == null)
+            {
+                return NotFound();
+            }
+            return View(group);
+        }
+
+        // POST: StudentController/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> GroupEdit(int id, Group group)
+        {
+            try
+            {
+                _context.Groups.Update(group);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(GroupIndex));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        // GET: StudentController/Delete/5
+        [Authorize(Policy = "lector")]
+        public async Task<IActionResult> GroupDelete(int? id)
+        {
+            if (id == null || _context.Groups == null)
+            {
+                return NotFound();
+            }
+
+            var group = await _context.Groups
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (group == null)
+            {
+                return NotFound();
+            }
+
+            return View(group);
+        }
+
+        // POST: StudentController/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> GroupDelete(int id, Group group)
+        {
+            try
+            {
+                _context.Groups.Remove(group);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(GroupIndex));
+            }
+            catch
+            {
+                return View();
             }
         }
     }

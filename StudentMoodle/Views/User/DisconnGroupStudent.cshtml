@@ -9,17 +9,17 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="ConnGroupStudent">
+        <form asp-action="DisConnGroupStudent">
             <p>
                 <h4>Группа @Html.DisplayFor(modelItem => modelItem.speciality)</h4>
                 <input type="hidden" asp-for="Id" class="form-control" />
 
                 <br /><label>Студенты:</label><br />
                 @Html.DropDownList(
-                    "student",
-                    new SelectList(ViewBag.Student),
-                    "Выберите студента",
-                    new { @class = "dropdown" }
+                "student",
+                new SelectList(ViewBag.Student),
+                "Выберите студента",
+                new { @class = "dropdown" }
                 )
                 @if (ViewData["ValidateMessage"] != null)
                 {
@@ -29,7 +29,7 @@
                 }
             </p>
             <p>
-                <input type="submit" value="Подключить" сlass="w-80 btn btn-lg btn-primary" />
+                <input type="submit" value="Отключить" сlass="w-80 btn btn-lg btn-primary" />
             </p>
         </form>
     </div>
