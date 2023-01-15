@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <Folder Include="Views\Lector\" />
+    <Folder Include="wwwroot\Files\" />
   </ItemGroup>
 
 </Project>

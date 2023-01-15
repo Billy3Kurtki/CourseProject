@@ -20,6 +20,7 @@ namespace StudentMoodle.Models
         public DbSet<Answer> Answers { get; set; } = default!;
         public DbSet<Group_Discipline> Group_Disciplines { get; set; } = default!;
         public DbSet<Group> Groups { get; set; } = default!;
+        public DbSet<FileModel> Files { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -265,6 +266,30 @@ namespace StudentMoodle.Models
 
                 entity.Property(e => e.speciality)
                     .HasColumnName("speciality");
+            });
+            modelBuilder.Entity<FileModel>(entity =>
+            {
+                entity.HasKey(e => new
+                {
+                    e.Id
+                });
+
+                entity.ToTable("file");
+
+                entity.Property(e => e.Id)
+                .HasColumnName("id");
+
+                entity.Property(e => e.Name)
+                .HasColumnName("name");
+
+                entity.Property(e => e.Path)
+                .HasColumnName("path");
+
+                entity.Property(e => e.IdStudent)
+                .HasColumnName("idstudent");
+
+                entity.Property(e => e.IdLabWork)
+                .HasColumnName("idlabwork");
             });
         }
     }

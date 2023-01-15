@@ -1,55 +1,74 @@
-﻿@model LabWork
+﻿@model (LabWork, FileModel)
 
+@{
+    var model1 = Model.Item1;
+    var model2 = Model.Item2;
+}
 
 <h1>Информация о лабораторной работе</h1>
 
 <table class="table">
     <tbody>
-    <tr>
-            <td>
-                @Html.DisplayNameFor(model => model.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(model => model.Title)
-            </td>
-    </tr>
         <tr>
             <td>
-                @Html.DisplayNameFor(model => model.DeadLine)
+                @Html.DisplayNameFor(model => model1.Title)
             </td>
             <td>
-                @Html.DisplayFor(model => model.DeadLine)
+                @Html.DisplayFor(model => model1.Title)
             </td>
         </tr>
         <tr>
             <td>
-                @Html.DisplayNameFor(model => model.status)
+                @Html.DisplayNameFor(model => model1.DeadLine)
             </td>
             <td>
-                @Html.DisplayFor(model => model.status)
+                @Html.DisplayFor(model => model1.DeadLine)
             </td>
-    </tr>
+        </tr>
         <tr>
             <td>
-                @Html.DisplayNameFor(model => model.Manual)
+                @Html.DisplayNameFor(model => model1.status)
             </td>
             <td>
-                <a href="@Html.DisplayFor(model => model.Manual)">@Html.DisplayFor(model => model.Manual)</a>
+                @Html.DisplayFor(model => model1.status)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.DisplayNameFor(model => model1.Manual)
+            </td>
+            <td>
+                <a href="@Html.DisplayFor(model => model1.Manual)">@Html.DisplayFor(model => model1.Manual)</a>
             </td>
         </tr>
         <tr>
             <td>
                 Ответ в виде файла
             </td>
+            @if(model2.Id != 0)
+            {
             <td>
-            <input type="file" name="uploadedFile" />
+                <p>
+                    <a href="@model2.Path" download="@model2.Path">@model2.Name</a>
+                    <input type="button" value="Загрузить другой файл"
+                           onclick="location.href='@Url.Action("AddFile", "Discipline", model1)'" />
+                </p>
             </td>
+            }
+            @if(model2.Id == 0)
+            {
+            <td>
+                <p>
+                    <input type="button" value="Загрузить файл"
+                           onclick="location.href='@Url.Action("AddFile", "Discipline", model1)'" />
+                </p>
+            </td>
+            }
         </tr>
     </tbody>
 </table>
 
 <div>
     <input type="button" value="Назад к дисциплине"
-           onclick="location.href='@Url.Action("IndexDiscipline", "Discipline", new {id = Model.IdDiscipline})'" />
+           onclick="location.href='@Url.Action("IndexDiscipline", "Discipline", new {id = model1.IdDiscipline})'" />
 </div>
-

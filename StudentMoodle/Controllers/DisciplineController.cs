@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StudentMoodle.Models;
 using System.Security.Claims;
+using System.IO;
+using System.Drawing.Drawing2D;
 
 namespace StudentMoodle.Controllers
 {
@@ -13,10 +15,12 @@ namespace StudentMoodle.Controllers
         // GET: HomeController1
 
         private readonly ApplicationDbContext _context;
+        IWebHostEnvironment _appEnvironment;
 
-        public DisciplineController(ApplicationDbContext context)
+        public DisciplineController(ApplicationDbContext context, IWebHostEnvironment appEnvironment)
         {
             _context = context;
+            _appEnvironment = appEnvironment;
         }
 
         public ActionResult Index()
@@ -34,7 +38,7 @@ namespace StudentMoodle.Controllers
                 }
             }
 
-            if(user.RoleId == 1)
+            if (user.RoleId == 1)
             {
                 var student = _context.Students.First(s => s.Id == user.Id);
                 var group_discplines = _context.Group_Disciplines.Where(g => g.Idgroup == student.IdGroup).ToList();
@@ -45,10 +49,10 @@ namespace StudentMoodle.Controllers
             }
             var discipline1 = new Discipline();
             var model = (
-                disciplines,
-                user,
-                discipline1
-                );
+            disciplines,
+            user,
+            discipline1
+            );
             return View(model);
 
         }
@@ -103,10 +107,10 @@ namespace StudentMoodle.Controllers
             var currentUserName = claimUser.Identity.Name;
             var user = _context.Users.First(u => u.Email == currentUserName);
             var model = (
-                labWorks,
-                user,
-                discipline,
-                tests);
+            labWorks,
+            user,
+            discipline,
+            tests);
             return View(model);
         }
 
@@ -160,7 +164,7 @@ namespace StudentMoodle.Controllers
             }
 
             var discipline = await _context.Disciplines
-                .FirstOrDefaultAsync(m => m.Id == id);
+            .FirstOrDefaultAsync(m => m.Id == id);
             if (discipline == null)
             {
                 return NotFound();
@@ -206,7 +210,7 @@ namespace StudentMoodle.Controllers
             {
                 IdDiscipline = disciplines.Id
             };
-            
+
             return View("~/Views/Discipline/FormsCreate/TestCreate/CreateTest.cshtml", test);
         }
 
@@ -219,7 +223,7 @@ namespace StudentMoodle.Controllers
             {
                 _context.Tests.Add(test);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("IndexDiscipline", "Discipline", new {id = test.IdDiscipline});
+                return RedirectToAction("IndexDiscipline", "Discipline", new { id = test.IdDiscipline });
             }
             catch
             {
@@ -237,8 +241,8 @@ namespace StudentMoodle.Controllers
             var currentUserName = claimUser.Identity.Name;
             var user = _context.Users.First(u => u.Email == currentUserName);
             var model = (
-                test,
-                user);
+            test,
+            user);
             return View("~/Views/Discipline/FormsCreate/TestCreate/TestDetails.cshtml", model);
         }
 
@@ -266,7 +270,7 @@ namespace StudentMoodle.Controllers
             {
                 _context.Tests.Update(test);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("IndexDiscipline", "Discipline", new {id = test.IdDiscipline});
+                return RedirectToAction("IndexDiscipline", "Discipline", new { id = test.IdDiscipline });
             }
             catch
             {
@@ -283,7 +287,7 @@ namespace StudentMoodle.Controllers
             }
 
             var test = await _context.Tests
-                .FirstOrDefaultAsync(m => m.Id == id);
+            .FirstOrDefaultAsync(m => m.Id == id);
             if (test == null)
             {
                 return NotFound();
@@ -343,7 +347,7 @@ namespace StudentMoodle.Controllers
             {
                 _context.LabWorks.Add(labWork);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("IndexDiscipline", "Discipline", new {id = labWork.IdDiscipline});
+                return RedirectToAction("IndexDiscipline", "Discipline", new { id = labWork.IdDiscipline });
             }
             catch
             {
@@ -353,7 +357,23 @@ namespace StudentMoodle.Controllers
 
         public ActionResult LabWorkDetails(LabWork labWork)
         {
-            return View("~/Views/Discipline/FormsCreate/LabWorkCreate/LabWorkDetails.cshtml", labWork);
+            ClaimsPrincipal claimUser = HttpContext.User;
+            var currentUserName = claimUser.Identity.Name;
+            var user = _context.Users.First(u => u.Email == currentUserName);
+            try
+            {
+                var file = _context.Files.First(f => f.IdStudent == user.Id);
+                var model = (
+                labWork,
+                file);
+                return View("~/Views/Discipline/FormsCreate/LabWorkCreate/LabWorkDetails.cshtml", model);
+            }catch
+            {
+                var model = (
+                labWork,
+                new FileModel() { Id = 0});
+                return View("~/Views/Discipline/FormsCreate/LabWorkCreate/LabWorkDetails.cshtml", model);
+            }
         }
 
         public async Task<IActionResult> LabWorkEdit(int? id)
@@ -379,7 +399,8 @@ namespace StudentMoodle.Controllers
             try
             {
                 _context.LabWorks.Update(labWork);
-                await _context.SaveChangesAsync();
+                await
+                _context.SaveChangesAsync();
                 return RedirectToAction("IndexDiscipline", "Discipline", new { id = labWork.IdDiscipline });
             }
             catch
@@ -397,7 +418,7 @@ namespace StudentMoodle.Controllers
             }
 
             var labWork = await _context.LabWorks
-                .FirstOrDefaultAsync(m => m.Id == id);
+            .FirstOrDefaultAsync(m => m.Id == id);
             if (labWork == null)
             {
                 return NotFound();
@@ -413,7 +434,7 @@ namespace StudentMoodle.Controllers
         {
             try
             {
-                
+
                 labWork = _context.LabWorks.Find(id);
                 var idDiscipline = labWork.IdDiscipline;
                 _context.LabWorks.Remove(labWork);
@@ -431,9 +452,9 @@ namespace StudentMoodle.Controllers
             var groups = _context.Group_Disciplines.Where(gd => gd.Iddiscipline == id).ToList();
             var group = _context.Groups.ToList();
             var listIdGroup = new List<int>();
-            
+
             var listIdGroupDisc = new List<int>();
-            foreach(var item in group)
+            foreach (var item in group)
             {
                 listIdGroup.Add(item.Id);
             }
@@ -449,9 +470,9 @@ namespace StudentMoodle.Controllers
             }
             var discipline = _context.Disciplines.First(d => d.Id == id);
             var model = (
-                listGroup,
-                discipline,
-                new Group());
+            listGroup,
+            discipline,
+            new Group());
             return View(model);
         }
 
@@ -462,11 +483,11 @@ namespace StudentMoodle.Controllers
                 Iddiscipline = iddiscipline,
                 Idgroup = idgroup
             };
-            
+
             _context.Group_Disciplines.Add(gd);
-            
+
             var students = _context.Students.Where(st => st.IdGroup == idgroup);
-            foreach(var item in students)
+            foreach (var item in students)
             {
                 var score = new Score()
                 {
@@ -477,7 +498,7 @@ namespace StudentMoodle.Controllers
                 _context.Scores.Add(score);
             }
             await _context.SaveChangesAsync();
-            return RedirectToAction("ConGroupIndex", "Discipline", new {id = iddiscipline});
+            return RedirectToAction("ConGroupIndex", "Discipline", new { id = iddiscipline });
         }
 
         public ActionResult DisconGroupIndex(int id)
@@ -493,9 +514,9 @@ namespace StudentMoodle.Controllers
             var discipline = _context.Disciplines.First(d => d.Id == id);
 
             var model = (
-                listGroup,
-                discipline,
-                new Group());
+            listGroup,
+            discipline,
+            new Group());
             return View(model);
         }
 
@@ -522,7 +543,44 @@ namespace StudentMoodle.Controllers
             {
                 return RedirectToAction("DisconGroupIndex", new { id = iddiscipline });
             }
-            
+
+        }
+        [HttpGet]
+        public ActionResult AddFile(LabWork labWork)
+        {
+            ClaimsPrincipal claimUser = HttpContext.User;
+            var currentUserName = claimUser.Identity.Name;
+            var user = _context.Users.First(u => u.Email == currentUserName);
+            var model = (
+            labWork,
+            user.Id,
+            _context.Files.ToList());
+            return View("~/Views/Discipline/FormsCreate/LabWorkCreate/AddFile.cshtml", model);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> AddFile(int idlabwork, int iduser, IFormFile uploadedFile)
+        {
+            var labwork = _context.LabWorks.Find(idlabwork);
+            if (uploadedFile != null)
+            {
+                string path = "/Files/" + uploadedFile.FileName;
+                using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
+                {
+                    await uploadedFile.CopyToAsync(fileStream);
+                }
+                FileModel file = new FileModel
+                {
+                    Name = uploadedFile.FileName,
+                    Path = path,
+                    IdLabWork = idlabwork,
+                    IdStudent = iduser
+                };
+
+                _context.Files.Add(file);
+                _context.SaveChanges();
+            }
+            return RedirectToAction("AddFile", "Discipline", labwork);
         }
     }
 }
