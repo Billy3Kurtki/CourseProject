@@ -6,6 +6,7 @@ using StudentMoodle.Models;
 using System.Security.Claims;
 using System.IO;
 using System.Drawing.Drawing2D;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace StudentMoodle.Controllers
 {
@@ -355,24 +356,63 @@ namespace StudentMoodle.Controllers
             }
         }
 
-        public ActionResult LabWorkDetails(LabWork labWork)
+        public async Task<ActionResult> LabWorkDetails(LabWork labWork)
         {
             ClaimsPrincipal claimUser = HttpContext.User;
             var currentUserName = claimUser.Identity.Name;
             var user = _context.Users.First(u => u.Email == currentUserName);
+            var discipline = _context.Disciplines.First(d => d.Id == labWork.IdDiscipline);
+            var userLector = _context.Users.First(u => u.Id == discipline.IdLector);
+            
             try
             {
                 var file = _context.Files.First(f => f.IdStudent == user.Id);
-                var model = (
-                labWork,
-                file);
-                return View("~/Views/Discipline/FormsCreate/LabWorkCreate/LabWorkDetails.cshtml", model);
-            }catch
+                try
+                {
+                    var score = await _context.LabWorkandStudents.FindAsync(labWork.Id, user.Id);
+                    var model = (
+                    labWork,
+                    file,
+                    user,
+                    score,
+                    userLector);
+                    return View("~/Views/Discipline/FormsCreate/LabWorkCreate/LabWorkDetails.cshtml", model);
+                }
+                catch 
+                {
+                    var model = (
+                    labWork,
+                    file,
+                    user,
+                    new LabWorkandStudent() { idlabwork = 0 },
+                    userLector);
+                    return View("~/Views/Discipline/FormsCreate/LabWorkCreate/LabWorkDetails.cshtml", model);
+                }
+                
+            }
+            catch
             {
-                var model = (
-                labWork,
-                new FileModel() { Id = 0});
-                return View("~/Views/Discipline/FormsCreate/LabWorkCreate/LabWorkDetails.cshtml", model);
+                try
+                {
+                    var score = await _context.LabWorkandStudents.FindAsync(labWork.Id, user.Id);
+                    var model = (
+                    labWork,
+                    new FileModel() { Id = 0 },
+                    user,
+                    score,
+                    userLector);
+                    return View("~/Views/Discipline/FormsCreate/LabWorkCreate/LabWorkDetails.cshtml", model);
+                }
+                catch
+                {
+                    var model = (
+                    labWork,
+                    new FileModel() { Id = 0 },
+                    user,
+                    new LabWorkandStudent() { idlabwork = 0 },
+                    userLector);
+                    return View("~/Views/Discipline/FormsCreate/LabWorkCreate/LabWorkDetails.cshtml", model);
+                }
             }
         }
 
@@ -581,6 +621,64 @@ namespace StudentMoodle.Controllers
                 _context.SaveChanges();
             }
             return RedirectToAction("AddFile", "Discipline", labwork);
+        }
+
+        public async Task<ActionResult> LabWorkStudents(LabWork labWork)
+        {
+            var groups = _context.Group_Disciplines.Where(gd => gd.Iddiscipline == labWork.IdDiscipline).ToList();
+            var students = new List<Student>();
+            foreach(var group in groups)
+            {
+                students.Add(_context.Students.First(st => st.IdGroup == group.Idgroup));
+            }
+            var files = _context.Files.ToList();
+            var students1 = new List<Student>();
+            foreach (var file in files)
+            {
+                students1.Add(students.First(st => st.Id == file.IdStudent));
+            }
+            var users = new List<UserView>();
+            foreach (var student in students1)
+            {
+                users.Add(_context.Users.First(st => st.Id == student.Id));
+            }
+            var files1 = new List<FileModel>();
+            foreach (var student in students1)
+            {
+                files1.Add(files.First(st => st.IdStudent == student.Id));
+            }
+            var scores = _context.LabWorkandStudents.ToList();
+            var model = (
+                labWork,
+                users,
+                files1,
+                scores);
+            return View("~/Views/Discipline/FormsCreate/LabWorkCreate/LabWorkStudents.cshtml", model);
+        }
+        [HttpPost]
+        public async Task<ActionResult> ScoreLabWork(int idlabwork, int iduser, int iddiscipline, int score)
+        {
+            var labwork = _context.LabWorks.Find(idlabwork);
+            
+            try
+            {
+                var labworkStudent = await _context.LabWorkandStudents.FindAsync(idlabwork, iduser);
+                labworkStudent.score = score;
+                _context.LabWorkandStudents.Update(labworkStudent);
+            } 
+            catch
+            {
+                var scoreLabWork = new LabWorkandStudent()
+                {
+                    idlabwork = idlabwork,
+                    idstudent = iduser,
+                    iddiscipline = iddiscipline,
+                    score = score
+                };
+                _context.LabWorkandStudents.Add(scoreLabWork);
+            }
+            await _context.SaveChangesAsync();
+            return RedirectToAction("LabWorkStudents", "Discipline", labwork);
         }
     }
 }

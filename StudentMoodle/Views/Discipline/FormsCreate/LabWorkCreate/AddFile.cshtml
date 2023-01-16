@@ -7,17 +7,12 @@
 }
 <h3>Выберите файл для загрузки</h3>
 <form asp-action="AddFile" asp-controller="Discipline" method="post" enctype="multipart/form-data">
-    <p>IdLabWork: <input type="text" name="idlabwork" value="@model1.Id" /></p><br />
-    <p>IdStudent: <input type="text" name="iduser" value="@model2" /></p><br />
+    <input type="hidden" name="idlabwork" value="@model1.Id" />
+    <input type="hidden" name="iduser" value="@model2" />
     <input type="file" name="uploadedFile" /><br>
     <input type="submit" value="Загрузить" />
 </form>
 
-<h3>Все файлы</h3>
-@foreach(var f in model3)
-{
-    <p>@f.Name</p>
-}
 <div>
     <input type="button" value="Назад к лабораторной работе"
            onclick="location.href='@Url.Action("LabWorkDetails", "Discipline", model1)'" />

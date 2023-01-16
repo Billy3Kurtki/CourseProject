@@ -21,6 +21,7 @@ namespace StudentMoodle.Models
         public DbSet<Group_Discipline> Group_Disciplines { get; set; } = default!;
         public DbSet<Group> Groups { get; set; } = default!;
         public DbSet<FileModel> Files { get; set; } = default!;
+        public DbSet<LabWorkandStudent> LabWorkandStudents { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -290,6 +291,29 @@ namespace StudentMoodle.Models
 
                 entity.Property(e => e.IdLabWork)
                 .HasColumnName("idlabwork");
+            });
+
+            modelBuilder.Entity<LabWorkandStudent>(entity =>
+            {
+                entity.HasKey(e => new
+                {
+                    e.idlabwork,
+                    e.idstudent
+                });
+
+                entity.ToTable("labwork_has_student");
+
+                entity.Property(e => e.idlabwork)
+                .HasColumnName("labwork_idlabwork");
+
+                entity.Property(e => e.idstudent)
+                .HasColumnName("student_User_idUser");
+
+                entity.Property(e => e.iddiscipline)
+                .HasColumnName("discipline_iddiscipline");
+
+                entity.Property(e => e.score)
+                .HasColumnName("scorelab");
             });
         }
     }

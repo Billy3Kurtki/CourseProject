@@ -1,0 +1,59 @@
+﻿@model (LabWork, List<UserView>, List<FileModel>, List<LabWorkandStudent>)
+
+@{
+    var model1 = Model.Item1;
+    var model2 = Model.Item2;
+    var model3 = Model.Item3;
+    var model4 = Model.Item4;
+}
+
+<h1>Студенты</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Имя студента
+            </th>
+            <th>
+                Ответ в виде файла
+            </th>
+            <th>
+                Оценка
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in model2) 
+{
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.fullName)
+            </td>
+            <td>
+                <a href="@model3.First(m => m.IdStudent == item.Id).Path" download="@model3.First(m => m.IdStudent == item.Id).Path">@model3.First(m => m.IdStudent == item.Id).Name</a>
+            </td>
+            @foreach(var item1 in model4)
+            {
+                
+                    <form asp-action="ScoreLabWork" asp-controller="Discipline" method="post">
+                        <input type="hidden" name="idlabwork" value="@model1.Id" />
+                        <input type="hidden" name="iduser" value="@item.Id" />
+                        <input type="hidden" name="iddiscipline" value="@model1.IdDiscipline" />
+                        <td>
+                        @if(item1.idstudent == item.Id)
+                        {
+                            <input type="text" name="score" value="@item1.score" /> 
+                        
+                        }else{
+                            <input type="text" name="score" value="0" />
+                        }
+                        <input type="submit" value="Оценить" />
+                    </td>
+                    </form>
+            }
+        </tr>
+}
+    </tbody>
+</table>

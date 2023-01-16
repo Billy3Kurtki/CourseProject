@@ -1,8 +1,11 @@
-﻿@model (LabWork, FileModel)
+﻿@model (LabWork, FileModel, UserView, LabWorkandStudent, UserView)
 
 @{
     var model1 = Model.Item1;
     var model2 = Model.Item2;
+    var model3 = Model.Item3;
+    var model4 = Model.Item4;
+    var model5 = Model.Item5;
 }
 
 <h1>Информация о лабораторной работе</h1>
@@ -41,30 +44,67 @@
                 <a href="@Html.DisplayFor(model => model1.Manual)">@Html.DisplayFor(model => model1.Manual)</a>
             </td>
         </tr>
-        <tr>
-            <td>
-                Ответ в виде файла
-            </td>
-            @if(model2.Id != 0)
-            {
-            <td>
-                <p>
-                    <a href="@model2.Path" download="@model2.Path">@model2.Name</a>
-                    <input type="button" value="Загрузить другой файл"
+        @if (model3.RoleId == 1)
+        {
+            <tr>
+                <td>
+                    Ответ в виде файла
+                </td>
+                @if (model2.Id != 0)
+                {
+                    <td>
+                        <p>
+                            <a href="@model2.Path" download="@model2.Path">@model2.Name</a>
+                            <input type="button" value="Загрузить другой файл"
                            onclick="location.href='@Url.Action("AddFile", "Discipline", model1)'" />
-                </p>
-            </td>
-            }
-            @if(model2.Id == 0)
-            {
-            <td>
-                <p>
-                    <input type="button" value="Загрузить файл"
+                        </p>
+                    </td>
+                }
+                @if (model2.Id == 0)
+                {
+                    <td>
+                        <p>
+                            <input type="button" value="Загрузить файл"
                            onclick="location.href='@Url.Action("AddFile", "Discipline", model1)'" />
-                </p>
-            </td>
+                        </p>
+                    </td>
+                }
+            </tr>
+            @if (model4.idlabwork != 0)
+            {
+                <tr>
+                    <td>
+                        <p>Отзыв</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Оценка
+                    </td>
+                    <td>
+                        <p>@model4.score</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Оценено
+                    </td>
+                    <td>
+                        @model5.fullName
+                    </td>
+                </tr>
             }
-        </tr>
+        }
+        @if(model3.RoleId == 2)
+        {
+            <tr>
+                <td>
+                    <input type="button" value="Список студентов"
+                       onclick="location.href='@Url.Action("LabWorkStudents", "Discipline", model1)'" />
+                </td>
+
+            </tr>
+        }
     </tbody>
 </table>
 
