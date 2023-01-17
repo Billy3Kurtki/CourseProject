@@ -33,7 +33,7 @@ namespace StudentMoodle.Controllers
             var user = _context.Users.First(u => u.Email == currentUserName);
             if (user.RoleId == 2)
             {
-                var lector = _context.Lectors.First(l => l.Id == user.Id);
+                var lector = _context.Lectors.ToList().SingleOrDefault(l => l.Id == user.Id);
                 if (lector != null)
                 {
                     disciplines = _context.Disciplines.Where(d => d.IdLector == user.Id).ToList();
@@ -42,11 +42,14 @@ namespace StudentMoodle.Controllers
 
             if (user.RoleId == 1)
             {
-                var student = _context.Students.First(s => s.Id == user.Id);
-                var group_discplines = _context.Group_Disciplines.Where(g => g.Idgroup == student.IdGroup).ToList();
-                foreach (var item in group_discplines)
+                var student = _context.Students.ToList().SingleOrDefault(s => s.Id == user.Id);
+                if (student != null)
                 {
-                    disciplines.Add(_context.Disciplines.First(d => d.Id == item.Iddiscipline));
+                    var group_discplines = _context.Group_Disciplines.Where(g => g.Idgroup == student.IdGroup).ToList();
+                    foreach (var item in group_discplines)
+                    {
+                        disciplines.Add(_context.Disciplines.First(d => d.Id == item.Iddiscipline));
+                    }
                 }
             }
             var discipline1 = new Discipline();
@@ -254,11 +257,10 @@ namespace StudentMoodle.Controllers
             }
             catch
             {
-                TestandStudent scoreTest = new TestandStudent();
                 var model = (
                 test,
                 user,
-                scoreTest);
+                new TestandStudent());
                 return View("~/Views/Discipline/FormsCreate/TestCreate/TestDetails.cshtml", model);
             }
             
@@ -583,11 +585,11 @@ namespace StudentMoodle.Controllers
             try
             {
                 var file1 = _context.Files.First(x => x.IdLabWork == idlabwork && x.IdStudent == iduser);
-                /*string path = Request.MapPath($"~{file1.Path}");
+                string path = _appEnvironment.WebRootPath + file1.Path;
                 if (System.IO.File.Exists(path))
                 {
                     System.IO.File.Delete(path);
-                }*/
+                }
                 _context.Files.Remove(file1);
             }
             catch { }

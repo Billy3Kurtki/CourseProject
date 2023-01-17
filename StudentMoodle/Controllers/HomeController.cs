@@ -27,11 +27,14 @@ namespace StudentMoodle.Controllers
                 disciplines = _context.Disciplines.Where(d => d.IdLector == user.Id).ToList();
             if(user.RoleId == 1)
             {
-                var student = _context.Students.First(s => s.Id == user.Id);
-                var group_discplines = _context.Group_Disciplines.Where(g => g.Idgroup == student.IdGroup).ToList();
-                foreach (var item in group_discplines)
+                var student = _context.Students.ToList().SingleOrDefault(s => s.Id == user.Id);
+                if (student != null)
                 {
-                    disciplines.Add(_context.Disciplines.First(d => d.Id == item.Iddiscipline));
+                    var group_discplines = _context.Group_Disciplines.Where(g => g.Idgroup == student.IdGroup).ToList();
+                    foreach (var item in group_discplines)
+                    {
+                        disciplines.Add(_context.Disciplines.First(d => d.Id == item.Iddiscipline));
+                    }
                 }
             }
             var model = (

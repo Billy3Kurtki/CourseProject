@@ -40,16 +40,16 @@ namespace StudentMoodle.Controllers
             {
                 var user = await _context.Users
                     .FirstOrDefaultAsync(s => s.Email == modelLogin.Email && s.Password == modelLogin.Password);
-                var role = await _context.Roles
-                    .FirstOrDefaultAsync(r => r.Id == user.RoleId);;
 
                 if (user != null)
                 {
+                    var role = await _context.Roles
+                    .FirstAsync(r => r.Id == user.RoleId); ;
                     await Authenticate(modelLogin.Email, role.RoleName); // аутентификация
                     return RedirectToAction("Index", "Home", user);
                 }
 
-                ViewData["ValidateMessage"] = "user not found";
+                ViewData["ValidateMessage"] = "логин или пароль указаны неверно";
                 return View();
 
             }

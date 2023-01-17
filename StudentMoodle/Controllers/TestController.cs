@@ -325,6 +325,7 @@ namespace StudentMoodle.Controllers
         }
         public async Task<IActionResult> PassedStudent(int idtest)
         {
+            var test = _context.Tests.First(t => t.Id == idtest);
             try
             {
                 var passedStudent = _context.TestandStudents.Where(ps => ps.idtest == idtest).ToList();
@@ -336,7 +337,8 @@ namespace StudentMoodle.Controllers
                 var model = (
                     students,
                     passedStudent,
-                    new UserView());
+                    new UserView(),
+                    test);
 
                 return View(model);
             }
@@ -345,9 +347,21 @@ namespace StudentMoodle.Controllers
                 var model = (
                     new List<UserView>(),
                     new List<TestandStudent>(),
-                    new UserView());
+                    new UserView(),
+                    test);
                 return View(model);
             }
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> OpenTest(int iduser, int idtest)
+        {
+            var testandstudent = _context.TestandStudents.First(ts => ts.idtest == idtest && ts.idstudent == iduser);
+            _context.TestandStudents.Remove(testandstudent);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("PassedStudent", new { idtest = idtest });
+        }
+        
     }
 }

@@ -27,12 +27,12 @@
                 <div>
                     <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Войти</button>
                 </div>
-
-                <div>
-                    <p>
-                        <a asp-action="Register">Регистрация</a>
-                    </p>
-                </div>
+                @if (ViewData["ValidateMessage"] != null)
+                {
+                    <br />
+                    <br />
+                    <label>@ViewData["ValidateMessage"]</label>
+                }
             </form>
         </section>
     </div>

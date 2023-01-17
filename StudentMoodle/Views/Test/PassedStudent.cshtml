@@ -1,10 +1,11 @@
-﻿@model (List<UserView>, List<TestandStudent>, UserView)
+﻿@model (List<UserView>, List<TestandStudent>, UserView, Test)
 
 @{
     ViewData["Title"] = "PassedStudent";
     var model1 = Model.Item1;
     var model2 = Model.Item2;
     var model3 = Model.Item3;
+    var model4 = Model.Item4;
 }
 
 <h1>PassedStudent</h1>
@@ -26,6 +27,7 @@
             <th>
                 Баллы
             </th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -51,9 +53,23 @@
                     <td>
                         @Html.DisplayFor(modelItem => item2.score)
                     </td>
+                    <form asp-action="OpenTest">
+                        <input type="hidden" name="iduser" value="@item1.Id" />
+                        <input type="hidden" name="idtest" value="@item2.idtest" />
+                        <td>
+                            <div class="form-group">
+                                <input type="submit" value="Открыть тест" class="btn btn-primary" />
+                            </div>
+                        </td>
+                    </form>
                 }    
             } 
         </tr>
     }
     </tbody>
 </table>
+
+<p>
+    <input type="button" value="Назад к тесту"
+           onclick="location.href='@Url.Action("TestDetails", "Discipline", new { idtest = model4.Id })'" />
+</p>
