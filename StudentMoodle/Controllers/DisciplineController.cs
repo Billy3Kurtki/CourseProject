@@ -676,5 +676,25 @@ namespace StudentMoodle.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("LabWorkStudents", "Discipline", labwork);
         }
+        public async Task<ActionResult> ResultOfDicsipline(int dkey)
+        {
+            var discipline = _context.Disciplines.First(d => d.Id == dkey);
+            var scores = new List<Score>();
+            var students = new List<UserView>();
+            try
+            {
+                scores = _context.Scores.Where(s => s.disciplineId == dkey).ToList();
+                foreach (var item in scores)
+                {
+                    students.Add(_context.Users.First(s => s.Id == item.userId));
+                }
+            } 
+            catch { }
+            var model = (
+                    scores,
+                    students,
+                    discipline);
+            return View(model);
+        }   
     }
 }

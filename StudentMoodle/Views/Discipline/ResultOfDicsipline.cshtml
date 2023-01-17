@@ -1,0 +1,47 @@
+﻿@model (List<Score>, List<UserView>, Discipline)
+
+@{
+    ViewData["Title"] = "ResultOfDicsipline";
+    var model1 = Model.Item1;
+    var model2 = Model.Item2;
+    var model3 = Model.Item3;
+}
+
+<h1>Результаты студентов за дисциплину</h1>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Имя студента
+            </th>
+            <th>
+                Баллы за дисциплину
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item1 in model1) {
+        <tr>
+            @foreach (var item2 in model2)
+            {
+                if (item1.userId == item2.Id)
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item2.fullName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item1.score)
+                    </td>
+                }    
+            } 
+            
+        </tr>
+}
+    </tbody>
+</table>
+
+<div>
+    <input type="button" value="Назад к дисциплине"
+           onclick="location.href='@Url.Action("IndexDiscipline", "Discipline", new { id = model3.Id })'" />
+</div>

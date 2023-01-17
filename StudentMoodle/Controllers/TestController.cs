@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StudentMoodle.Models;
@@ -7,6 +8,7 @@ using System.Security.Claims;
 
 namespace StudentMoodle.Controllers
 {
+    [Authorize]
     public class TestController : Controller
     {
         private readonly ApplicationDbContext _context;
