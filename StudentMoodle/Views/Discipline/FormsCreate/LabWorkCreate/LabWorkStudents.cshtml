@@ -19,6 +19,9 @@
                 Ответ в виде файла
             </th>
             <th>
+                Дата загрузки
+            </th>
+            <th>
                 Оценка
             </th>
             <th></th>
@@ -36,20 +39,22 @@
             </td>
             @foreach(var item1 in model4)
             {
-                
+                <td>
+                        @if(item1.idstudent == item.Id && item1.idlabwork == model1.Id)
+                        {
+                            @Html.DisplayFor(modelItem => item1.passDate)
+                        }
+                </td>
                     <form asp-action="ScoreLabWork" asp-controller="Discipline" method="post">
                         <input type="hidden" name="idlabwork" value="@model1.Id" />
                         <input type="hidden" name="iduser" value="@item.Id" />
                         <input type="hidden" name="iddiscipline" value="@model1.IdDiscipline" />
                         <td>
-                        @if(item1.idstudent == item.Id)
+                        @if(item1.idstudent == item.Id && item1.idlabwork == model1.Id)
                         {
-                            <input type="text" name="score" value="@item1.score" /> 
-                        
-                        }else{
-                            <input type="text" name="score" value="0" />
+                            <input type="text" name="score" value="@item1.score" />
+                            <input type="submit" value="Оценить" />
                         }
-                        <input type="submit" value="Оценить" />
                     </td>
                     </form>
             }
