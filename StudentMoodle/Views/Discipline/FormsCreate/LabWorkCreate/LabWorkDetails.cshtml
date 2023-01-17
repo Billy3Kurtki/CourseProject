@@ -50,7 +50,7 @@
                 <td>
                     Ответ в виде файла
                 </td>
-                @if (model2.Id != 0)
+                @if (model2.Id != 0 && model2.IdLabWork == model1.Id)
                 {
                     <td>
                         <p>
@@ -60,7 +60,7 @@
                         </p>
                     </td>
                 }
-                @if (model2.Id == 0)
+                else
                 {
                     <td>
                         <p>
@@ -69,6 +69,7 @@
                         </p>
                     </td>
                 }
+                    
             </tr>
             @if (model4.idlabwork != 0)
             {
@@ -82,7 +83,14 @@
                         Оценка
                     </td>
                     <td>
-                        <p>@model4.score</p>
+                        @if (model4.score == 0)
+                        {
+                            <p>Не оценено</p>
+                        } 
+                        else
+                        {
+                            <p>@model4.score</p>
+                        }
                     </td>
                 </tr>
                 <tr>

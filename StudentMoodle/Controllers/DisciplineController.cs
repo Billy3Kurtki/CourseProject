@@ -382,7 +382,7 @@ namespace StudentMoodle.Controllers
             var discipline = _context.Disciplines.First(d => d.Id == labWork.IdDiscipline);
             var userLector = _context.Users.First(u => u.Id == discipline.IdLector);
             var files = _context.Files.ToList();
-            var file = files.FirstOrDefault(f => f.IdStudent == user.Id);
+            var file = files.FirstOrDefault(f => f.IdStudent == user.Id && f.IdLabWork == labWork.Id);
             var score = _context.LabWorkandStudents.ToList().SingleOrDefault(x => x.idlabwork == labWork.Id && x.idstudent == user.Id);
             var model = (
                     labWork,
@@ -580,6 +580,26 @@ namespace StudentMoodle.Controllers
         public async Task<ActionResult> AddFile(int idlabwork, int iduser, IFormFile uploadedFile)
         {
             var labwork = _context.LabWorks.Find(idlabwork);
+            try
+            {
+                var file1 = _context.Files.First(x => x.IdLabWork == idlabwork && x.IdStudent == iduser);
+                /*string path = Request.MapPath($"~{file1.Path}");
+                if (System.IO.File.Exists(path))
+                {
+                    System.IO.File.Delete(path);
+                }*/
+                _context.Files.Remove(file1);
+            }
+            catch { }
+            int score = 0;
+            try
+            {
+                var scorelab = _context.LabWorkandStudents.First(x => x.idlabwork == idlabwork && x.idstudent == iduser);
+                score = scorelab.score;
+                _context.LabWorkandStudents.Remove(scorelab);
+                _context.SaveChanges();
+            }
+            catch { }
             if (uploadedFile != null)
             {
                 string path = "/Files/" + uploadedFile.FileName;
@@ -599,18 +619,9 @@ namespace StudentMoodle.Controllers
                     idlabwork = idlabwork,
                     idstudent = iduser,
                     iddiscipline = labwork.IdDiscipline,
-                    score = 0,
+                    score = score,
                     passDate = DateTime.Now
                 };
-                try { 
-                var file1 = _context.Files.Where(x => x.IdLabWork == idlabwork && x.IdStudent == iduser).ToList();
-                    foreach (var item in file1)
-                    {
-                        _context.Files.Remove(item);
-                    }
-                }
-                catch { }
-                
                 
                 _context.Files.Add(file);
                 _context.LabWorkandStudents.Add(labworkandstudent);
@@ -627,7 +638,7 @@ namespace StudentMoodle.Controllers
             {
                 students.Add(_context.Students.First(st => st.IdGroup == group.Idgroup));
             }
-            var files = _context.Files.ToList();
+            var files = _context.Files.Where(f => f.IdLabWork == labWork.Id).ToList();
             var students1 = new List<Student>();
             foreach (var file in files)
             {
@@ -641,7 +652,7 @@ namespace StudentMoodle.Controllers
             var files1 = new List<FileModel>();
             foreach (var student in students1)
             {
-                files1.Add(files.First(st => st.IdStudent == student.Id));
+                files1.Add(files.First(st => st.IdStudent == student.Id && st.IdLabWork == labWork.Id));
             }
             var scores = _context.LabWorkandStudents.ToList();
             var model = (
