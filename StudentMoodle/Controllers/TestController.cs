@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StudentMoodle.Models;
+using System.Linq;
+using System.Security.Claims;
 
 namespace StudentMoodle.Controllers
 {
@@ -17,9 +19,14 @@ namespace StudentMoodle.Controllers
         // GET: TestController
         public async Task<ActionResult> Index(Test tests)
         {
+            ClaimsPrincipal claimUser = HttpContext.User;
+            var currentUserName = claimUser.Identity.Name;
+            var user = await _context.Users.FirstAsync(s => s.Email == currentUserName);
+
             var test = await _context.Tests.FirstAsync(t => t.Id == tests.Id);
             var task = _context.Tasks.Where(t => t.idTest == test.Id).ToList();
             var answer = new List<Answer>();
+
             foreach (var item in task)
             {
                 var answers = _context.Answers.Where(a => a.idTask == item.Id);
@@ -31,7 +38,8 @@ namespace StudentMoodle.Controllers
             var model = (
                 test,
                 task,
-                answer);
+                answer,
+                user);
             return View("TestForm", model);
         }
 
@@ -44,7 +52,7 @@ namespace StudentMoodle.Controllers
             var task = _context.Tasks.Where(t => t.idTest == tests.Id).ToList();
             var model = (
                 task,
-                tests, 
+                tests,
                 new Tasks());
             return View(model);
         }
@@ -272,6 +280,73 @@ namespace StudentMoodle.Controllers
             catch
             {
                 return View();
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CheakTest(int idtest, int iduser)
+        {
+            var tasks = _context.Tasks.Where(t => t.idTest == idtest).ToList();
+            //var answer = new List<Answer>();
+            int score = 0;
+            foreach (var item in tasks)
+            {
+                bool answer = Request.Form[$"{item.Title}"].ToString() == "True";
+                if (answer)
+                {
+                    score++;
+                }
+            }
+
+            var test = _context.Tests.First(t => t.Id == idtest);
+
+            try
+            {
+                //TODO пока неюзается
+                var testStudent = await _context.TestandStudents.FindAsync(idtest, iduser);
+                testStudent.score = score;
+                _context.TestandStudents.Update(testStudent);
+            }
+            catch
+            {
+                var scoreTest = new TestandStudent()
+                {
+                    idtest = idtest,
+                    idstudent = iduser,
+                    iddiscipline = test.IdDiscipline,
+                    score = score,
+                    passDate = DateTime.Now
+                };
+                _context.TestandStudents.Add(scoreTest);
+            }
+            await _context.SaveChangesAsync();
+            return RedirectToAction("TestDetails", "Discipline", new { idtest = idtest });
+        }
+        public async Task<IActionResult> PassedStudent(int idtest)
+        {
+            try
+            {
+                var passedStudent = _context.TestandStudents.Where(ps => ps.idtest == idtest).ToList();
+                var students = new List<UserView>();
+                foreach (var item in passedStudent)
+                {
+                    students.Add(_context.Users.First(s => s.Id == item.idstudent));
+                }
+                var model = (
+                    students,
+                    passedStudent,
+                    new UserView());
+
+                return View(model);
+            }
+            catch
+            {
+                var model = (
+                    new List<UserView>(),
+                    new List<TestandStudent>(),
+                    new UserView());
+                return View(model);
             }
         }
     }

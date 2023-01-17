@@ -1,10 +1,11 @@
 ﻿@using StudentMoodle.Models
-@model (Test, List<Tasks>, List<Answer>)
+@model (Test, List<Tasks>, List<Answer>, UserView)
 
 @{
     var model1 = Model.Item1;
     var model2 = Model.Item2;
     var model3 = Model.Item3;
+    var model4 = Model.Item4;
 }
 
 <div class="text-center">
@@ -14,7 +15,9 @@
 </div>
 
 <div>
-    <form asp-action="">
+    <form asp-action="CheakTest">
+        <input type="hidden" name="idtest" value="@model1.Id" />
+        <input type="hidden" name="iduser" value="@model4.Id" />
         @foreach (var item1 in model2)
     {
         @Html.DisplayFor(modelItem => item1.Title) <br />
@@ -27,6 +30,9 @@
             }
         }
     }
+    <div class="form-group">
+        <input type="submit" value="Отправить" class="btn btn-primary" />
+    </div>
     </form>
     
 </div>

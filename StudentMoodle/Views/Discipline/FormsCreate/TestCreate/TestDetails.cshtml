@@ -1,8 +1,9 @@
-﻿@model (Test, UserView)
+﻿@model (Test, UserView, TestandStudent)
 
 @{
     var model1 = Model.Item1;
     var model2 = Model.Item2;
+    var model3 = Model.Item3;
 }
 
 <h1>Информация о тесте</h1>
@@ -36,13 +37,30 @@
         <tr>
             @if (model2.RoleId == 1)
             {
-                <td>
-                    Начать прохождение
-                </td>
-                <td>
-                        <input type="button" value="Пройти тест"
-                           onclick="location.href='@Url.Action("Index", "Test", model1)'" />
-                </td>
+                @if (model3.idtest == 0)
+                {
+                    <td>
+                        Начать прохождение
+                    </td>
+                    <td>
+                        <input type="button" value="Пройти тест" 
+                            onclick="location.href='@Url.Action("Index", "Test", model1)'" />
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        Колличество баллов:
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model3.score)
+                    </td>
+                    <td>
+                        Время сдачи <br/>
+                        @Html.DisplayFor(model => model3.passDate)
+                    </td>
+                }
+                
             }
             @if (model2.RoleId == 2)
             {
@@ -54,9 +72,8 @@
                        onclick="location.href='@Url.Action("TasksIndex", "Test", model1)'" />
                 </td>
                 <td>
-                    @*TODO*@
                     <input type="button" value="Студенты прошедшие тест"
-                       onclick="location.href='@Url.Action("#", "#")'" />
+                       onclick="location.href='@Url.Action("PassedStudent", "Test", new { idtest = model1.Id})'" />
                 </td>
             }
         </tr>

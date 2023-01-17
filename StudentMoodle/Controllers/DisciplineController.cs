@@ -232,19 +232,35 @@ namespace StudentMoodle.Controllers
             }
         }
 
-        public ActionResult TestDetails(int? idtest, Test test)
+        public async Task<ActionResult> TestDetails(int? idtest, Test test)
         {
+            ClaimsPrincipal claimUser = HttpContext.User;
+            var currentUserName = claimUser.Identity.Name;
+            var user = await _context.Users.FirstAsync(s => s.Email == currentUserName);
+
             if (idtest != null)
             {
                 test = _context.Tests.First(d => d.Id == idtest);
             }
-            ClaimsPrincipal claimUser = HttpContext.User;
-            var currentUserName = claimUser.Identity.Name;
-            var user = _context.Users.First(u => u.Email == currentUserName);
-            var model = (
-            test,
-            user);
-            return View("~/Views/Discipline/FormsCreate/TestCreate/TestDetails.cshtml", model);
+            try
+            {
+                var scoreTest = _context.TestandStudents.First(s => s.idtest == idtest && s.idstudent == user.Id);
+                var model = (
+                test,
+                user,
+                scoreTest);
+                return View("~/Views/Discipline/FormsCreate/TestCreate/TestDetails.cshtml", model);
+            }
+            catch
+            {
+                TestandStudent scoreTest = new TestandStudent();
+                var model = (
+                test,
+                user,
+                scoreTest);
+                return View("~/Views/Discipline/FormsCreate/TestCreate/TestDetails.cshtml", model);
+            }
+            
         }
 
         public async Task<IActionResult> TestEdit(int? id)
@@ -356,6 +372,7 @@ namespace StudentMoodle.Controllers
             }
         }
 
+        //TODO фиксить надо
         public async Task<ActionResult> LabWorkDetails(LabWork labWork)
         {
             ClaimsPrincipal claimUser = HttpContext.User;
@@ -673,7 +690,8 @@ namespace StudentMoodle.Controllers
                     idlabwork = idlabwork,
                     idstudent = iduser,
                     iddiscipline = iddiscipline,
-                    score = score
+                    score = score,
+                    passDate = DateTime.Now
                 };
                 _context.LabWorkandStudents.Add(scoreLabWork);
             }
