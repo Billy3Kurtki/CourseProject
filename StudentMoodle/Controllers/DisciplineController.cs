@@ -644,7 +644,9 @@ namespace StudentMoodle.Controllers
                     idstudent = iduser,
                     iddiscipline = labwork.IdDiscipline,
                     score = score,
-                    passDate = DateTime.Now
+                    passDate = DateTime.Now,
+                    idlector = _context.Disciplines.First(d => d.Id == labwork.IdDiscipline).IdLector
+                    
                 };
                 
                 _context.Files.Add(file);
