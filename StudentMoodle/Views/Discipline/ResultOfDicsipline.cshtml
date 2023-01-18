@@ -1,14 +1,35 @@
-﻿@model (List<Score>, List<UserView>, Discipline)
+﻿@model (List<Score>, List<UserView>, Discipline, Group)
 
 @{
     ViewData["Title"] = "ResultOfDicsipline";
     var model1 = Model.Item1;
     var model2 = Model.Item2;
     var model3 = Model.Item3;
+    var model4 = Model.Item4;
 }
 
 <h1>Результаты студентов за дисциплину</h1>
-</p>
+<form asp-action="ResultOfDicsiplineByGroup">
+    <input type="hidden" name="iddiscipline" value="@model3.Id" />
+    <p>
+        <br /><label>Выбирете группу:</label><br />
+        @Html.DropDownList(
+        "group",
+        new SelectList(ViewBag.Group),
+        "Все",
+        new { @class = "dropdown" }
+        )
+        <input type="submit" value="Выбрать" сlass="w-80 btn btn-lg btn-primary" />
+    </p>
+</form>
+@if (model4.Id != 0)
+{
+    <h4>Студенты группы @model4.speciality</h4>
+}
+else
+{
+    <h4>Студенты всех групп</h4>
+}
 <table class="table">
     <thead>
         <tr>

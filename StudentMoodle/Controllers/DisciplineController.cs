@@ -8,6 +8,7 @@ using System.IO;
 using System.Drawing.Drawing2D;
 using static System.Formats.Asn1.AsnWriter;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace StudentMoodle.Controllers
 {
@@ -483,7 +484,7 @@ namespace StudentMoodle.Controllers
                 listIdGroupDisc.Add(item.Idgroup);
             }
             List<int> listDontConnGroups = listIdGroup.Except(listIdGroupDisc).ToList();
-            var listGroup = new List<Group>();
+            var listGroup = new List<Models.Group>();
             foreach (var item in listDontConnGroups)
             {
                 listGroup.Add(_context.Groups.First(g => g.Id == item));
@@ -492,7 +493,7 @@ namespace StudentMoodle.Controllers
             var model = (
             listGroup,
             discipline,
-            new Group());
+            new Models.Group());
             return View(model);
         }
 
@@ -525,7 +526,7 @@ namespace StudentMoodle.Controllers
         {
             var groups = _context.Group_Disciplines.Where(gd => gd.Iddiscipline == id).ToList();
 
-            var listGroup = new List<Group>();
+            var listGroup = new List<Models.Group>();
             foreach (var item in groups)
             {
                 listGroup.Add(_context.Groups.First(g => g.Id == item.Idgroup));
@@ -536,7 +537,7 @@ namespace StudentMoodle.Controllers
             var model = (
             listGroup,
             discipline,
-            new Group());
+            new Models.Group());
             return View(model);
         }
 
@@ -632,38 +633,61 @@ namespace StudentMoodle.Controllers
             return RedirectToAction("AddFile", "Discipline", labwork);
         }
 
-        public async Task<ActionResult> LabWorkStudents(LabWork labWork)
+        public ActionResult LabWorkStudents(LabWork labWork, int? idgroup)
         {
-            var groups = _context.Group_Disciplines.Where(gd => gd.Iddiscipline == labWork.IdDiscipline).ToList();
-            var students = new List<Student>();
-            foreach(var group in groups)
+            var groupsDownList = _context.Groups.ToList();
+            ViewBag.Group = groupsDownList.Select(g => g.Title);
+
+            var passedStudent = new List<LabWorkandStudent>();
+            var liststudents = new List<UserView>();
+
+            var group = new Models.Group();
+            var files = new List<FileModel>();
+            try
             {
-                students.Add(_context.Students.First(st => st.IdGroup == group.Idgroup));
+                group = _context.Groups.First(g => g.Id == idgroup);
+                var students = _context.Students.Where(s => s.IdGroup == idgroup).ToList();
+                passedStudent = _context.LabWorkandStudents.Where(l => l.idlabwork == labWork.Id).ToList();
+
+                foreach (var item in passedStudent)
+                {
+                    foreach (var student in students)
+                    {
+                        if (item.idstudent == student.Id)
+                        {
+                            liststudents.Add(_context.Users.First(s => s.Id == student.Id));
+                        }
+                    }
+                }
             }
-            var files = _context.Files.Where(f => f.IdLabWork == labWork.Id).ToList();
-            var students1 = new List<Student>();
-            foreach (var file in files)
+            catch
             {
-                students1.Add(students.First(st => st.Id == file.IdStudent));
+                passedStudent = _context.LabWorkandStudents.Where(l => l.idlabwork == labWork.Id).ToList();
+
+                foreach (var item in passedStudent)
+                {
+                    liststudents.Add(_context.Users.First(s => s.Id == item.idstudent));
+                }
             }
-            var users = new List<UserView>();
-            foreach (var student in students1)
+
+            if (liststudents.Count != 0)
             {
-                users.Add(_context.Users.First(st => st.Id == student.Id));
+                foreach (var item in liststudents)
+                {
+                    files.Add(_context.Files.First(f => f.IdLabWork == labWork.Id && f.IdStudent == item.Id));
+                }
+
             }
-            var files1 = new List<FileModel>();
-            foreach (var student in students1)
-            {
-                files1.Add(files.First(st => st.IdStudent == student.Id && st.IdLabWork == labWork.Id));
-            }
-            var scores = _context.LabWorkandStudents.ToList();
+
             var model = (
                 labWork,
-                users,
-                files1,
-                scores);
+                liststudents,
+                files,
+                passedStudent,
+                group);
             return View("~/Views/Discipline/FormsCreate/LabWorkCreate/LabWorkStudents.cshtml", model);
         }
+
         [HttpPost]
         public async Task<ActionResult> ScoreLabWork(int idlabwork, int iduser, int iddiscipline, int score)
         {
@@ -676,25 +700,76 @@ namespace StudentMoodle.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("LabWorkStudents", "Discipline", labwork);
         }
-        public async Task<ActionResult> ResultOfDicsipline(int dkey)
+
+        [HttpPost]
+        public ActionResult ResultOfLabWorkByGroup(int idlabwork)
         {
+            var labwork = _context.LabWorks.Find(idlabwork);
+            var groupTitle = Request.Form["group"].ToString();
+
+            if (groupTitle.Length != 0)
+            {
+                int groupId = _context.Groups.First(g => g.Title == groupTitle).Id;
+                return LabWorkStudents(labwork, groupId);
+            }
+            else
+            {
+                return LabWorkStudents(labwork, null);
+            }
+        }
+
+        public ActionResult ResultOfDicsipline(int dkey, int? idgroup)
+        {
+            var groupsDownList = _context.Groups.ToList();
+            ViewBag.Group = groupsDownList.Select(g => g.Title);
             var discipline = _context.Disciplines.First(d => d.Id == dkey);
             var scores = new List<Score>();
-            var students = new List<UserView>();
+            var liststudent = new List<UserView>();
+            var group = new Models.Group();
+
             try
+            {
+                group = _context.Groups.First(g => g.Id == idgroup);
+                var students = _context.Students.Where(s => s.IdGroup == idgroup).ToList();
+                foreach (var item in students)
+                {
+                    scores.Add(_context.Scores.First(s => s.userId == item.Id && s.disciplineId == dkey));
+                    liststudent.Add(_context.Users.First(u => u.Id == item.Id));
+                }
+            }
+            catch
             {
                 scores = _context.Scores.Where(s => s.disciplineId == dkey).ToList();
                 foreach (var item in scores)
                 {
-                    students.Add(_context.Users.First(s => s.Id == item.userId));
+                    liststudent.Add(_context.Users.First(s => s.Id == item.userId));
                 }
-            } 
-            catch { }
+            }
+
             var model = (
                     scores,
-                    students,
-                    discipline);
+                    liststudent,
+                    discipline,
+                    group);
             return View(model);
-        }   
+        }
+
+        [HttpPost]
+        public ActionResult ResultOfDicsiplineByGroup(int iddiscipline)
+        {
+            var groupTitle = Request.Form["group"].ToString();
+            var discipline = _context.Disciplines.First(d => d.Id == iddiscipline);
+
+            if (groupTitle.Length != 0)
+            {
+                int groupId = _context.Groups.First(g => g.Title == groupTitle).Id;
+                return RedirectToAction("ResultOfDicsipline", new { dkey = discipline.Id, idgroup = groupId });
+            }
+            else
+            {
+                return RedirectToAction("ResultOfDicsipline", new { dkey = discipline.Id });
+            }
+        }
+            
     }
 }

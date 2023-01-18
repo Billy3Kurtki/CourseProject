@@ -216,7 +216,7 @@ namespace StudentMoodle.Controllers
             }
         }
 
-        public async Task<ActionResult> EditTask(int id)
+        public async Task<ActionResult> EditTask(int? id)
         {
             if (id == null || _context.Tasks == null)
             {
@@ -325,33 +325,67 @@ namespace StudentMoodle.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("TestDetails", "Discipline", new { idtest = idtest });
         }
-        public async Task<IActionResult> PassedStudent(int idtest)
+        public IActionResult PassedStudent(int idtest, int? idgroup)
         {
+            var groupsDownList = _context.Groups.ToList();
+            ViewBag.Group = groupsDownList.Select(g => g.Title);
             var test = _context.Tests.First(t => t.Id == idtest);
+
+            var passedStudent = new List<TestandStudent>();
+            var liststudents = new List<UserView>();
+
+            var group = new Models.Group();
+
             try
             {
-                var passedStudent = _context.TestandStudents.Where(ps => ps.idtest == idtest).ToList();
-                var students = new List<UserView>();
+                group = _context.Groups.First(g => g.Id == idgroup);
+                var students = _context.Students.Where(s => s.IdGroup == idgroup).ToList();
+                passedStudent = _context.TestandStudents.Where(ps => ps.idtest == idtest).ToList();
                 foreach (var item in passedStudent)
                 {
-                    students.Add(_context.Users.First(s => s.Id == item.idstudent));
+                    foreach (var student in students)
+                    {
+                        if (item.idstudent == student.Id)
+                        {
+                            liststudents.Add(_context.Users.First(s => s.Id == student.Id));
+                        }
+                    }
                 }
-                var model = (
-                    students,
-                    passedStudent,
-                    new UserView(),
-                    test);
 
-                return View(model);
             }
             catch
             {
-                var model = (
-                    new List<UserView>(),
-                    new List<TestandStudent>(),
-                    new UserView(),
-                    test);
-                return View(model);
+                passedStudent = _context.TestandStudents.Where(ps => ps.idtest == idtest).ToList();
+                foreach (var item in passedStudent)
+                {
+                    liststudents.Add(_context.Users.First(s => s.Id == item.idstudent));
+                }
+            }
+
+            var model = (
+                liststudents,
+                passedStudent,
+                new UserView(),
+                test,
+                group);
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ResultOfTestByGroup(int idtest)
+        {
+            var groupTitle = Request.Form["group"].ToString();
+            var test = _context.Tests.First(t => t.Id == idtest);
+
+            if (groupTitle.Length != 0)
+            {
+                int groupId = _context.Groups.First(g => g.Title == groupTitle).Id;
+                return RedirectToAction("PassedStudent", new { idtest = test.Id, idgroup = groupId });
+            }
+            else
+            {
+                return RedirectToAction("PassedStudent", new { idtest = test.Id });
             }
         }
 
