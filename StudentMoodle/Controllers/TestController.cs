@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using StudentMoodle.Models;
 using System.Linq;
 using System.Security.Claims;
@@ -12,10 +13,12 @@ namespace StudentMoodle.Controllers
     public class TestController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly ILogger<AccountController> _logger;
 
-        public TestController(ApplicationDbContext context)
+        public TestController(ApplicationDbContext context, ILogger<AccountController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         // GET: TestController
@@ -45,6 +48,7 @@ namespace StudentMoodle.Controllers
             return View("TestForm", model);
         }
 
+        [Authorize(Policy = "lector")]
         public ActionResult TasksIndex(int? idtest, Test tests)
         {
             if (idtest != null)
@@ -59,6 +63,7 @@ namespace StudentMoodle.Controllers
             return View(model);
         }
 
+        [Authorize(Policy = "lector")]
         public async Task<ActionResult> TasksCreate(int? testkey)
         {
             if (testkey == null || _context.Tests == null)
@@ -96,6 +101,7 @@ namespace StudentMoodle.Controllers
             }
         }
 
+        [Authorize(Policy = "lector")]
         public ActionResult AnswerIndex(int? idtask, Tasks tasks)
         {
             if (idtask != null)
@@ -110,6 +116,7 @@ namespace StudentMoodle.Controllers
             return View(model);
         }
 
+        [Authorize(Policy = "lector")]
         public async Task<ActionResult> AnswerCreate(int? tascskey)
         {
             if (tascskey == null || _context.Tasks == null)
@@ -147,7 +154,7 @@ namespace StudentMoodle.Controllers
             }
         }
 
-        // GET: TestController/Edit/5
+        [Authorize(Policy = "lector")]
         public async Task<ActionResult> EditAnswer(int? id)
         {
             if (id == null || _context.Answers == null)
@@ -180,6 +187,7 @@ namespace StudentMoodle.Controllers
             }
         }
 
+        [Authorize(Policy = "lector")]
         public async Task<IActionResult> AnswerDelete(int? id)
         {
             if (id == null || _context.Answers == null)
@@ -216,6 +224,7 @@ namespace StudentMoodle.Controllers
             }
         }
 
+        [Authorize(Policy = "lector")]
         public async Task<ActionResult> EditTask(int? id)
         {
             if (id == null || _context.Tasks == null)
@@ -248,6 +257,7 @@ namespace StudentMoodle.Controllers
             }
         }
 
+        [Authorize(Policy = "lector")]
         public async Task<IActionResult> DeleteTask(int? id)
         {
             if (id == null || _context.Tasks == null)
@@ -303,28 +313,20 @@ namespace StudentMoodle.Controllers
 
             var test = _context.Tests.First(t => t.Id == idtest);
 
-            try
+            var scoreTest = new TestandStudent()
             {
-                //TODO пока неюзается
-                var testStudent = await _context.TestandStudents.FindAsync(idtest, iduser);
-                testStudent.score = score;
-                _context.TestandStudents.Update(testStudent);
-            }
-            catch
-            {
-                var scoreTest = new TestandStudent()
-                {
-                    idtest = idtest,
-                    idstudent = iduser,
-                    iddiscipline = test.IdDiscipline,
-                    score = score,
-                    passDate = DateTime.Now
-                };
-                _context.TestandStudents.Add(scoreTest);
-            }
+                idtest = idtest,
+                idstudent = iduser,
+                iddiscipline = test.IdDiscipline,
+                score = score,
+                passDate = DateTime.Now
+            };
+            _context.TestandStudents.Add(scoreTest);
             await _context.SaveChangesAsync();
             return RedirectToAction("TestDetails", "Discipline", new { idtest = idtest });
         }
+
+        [Authorize(Policy = "lector")]
         public IActionResult PassedStudent(int idtest, int? idgroup)
         {
             var groupsDownList = _context.Groups.ToList();

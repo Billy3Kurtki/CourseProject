@@ -93,14 +93,19 @@
                         }
                     </td>
                 </tr>
+                @if (model4.score != 0)
+                {
                 <tr>
-                    <td>
-                        Оценено
+                    
+                     <td>
+                            Оценено
+                        </td>
+                        <td>
+                            @model5.fullName
                     </td>
-                    <td>
-                        @model5.fullName
-                    </td>
+                    
                 </tr>
+                }
             }
         }
         @if(model3.RoleId == 2)

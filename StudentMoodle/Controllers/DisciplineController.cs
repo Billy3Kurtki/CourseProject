@@ -19,11 +19,12 @@ namespace StudentMoodle.Controllers
 
         private readonly ApplicationDbContext _context;
         IWebHostEnvironment _appEnvironment;
-
-        public DisciplineController(ApplicationDbContext context, IWebHostEnvironment appEnvironment)
+        private readonly ILogger<AccountController> _logger;
+        public DisciplineController(ApplicationDbContext context, IWebHostEnvironment appEnvironment, ILogger<AccountController> logger)
         {
             _context = context;
             _appEnvironment = appEnvironment;
+            _logger = logger;
         }
 
         public ActionResult Index()
@@ -53,6 +54,7 @@ namespace StudentMoodle.Controllers
                     }
                 }
             }
+            _logger.LogInformation("Пользователь открыл главную страницу");
             var discipline1 = new Discipline();
             var model = (
             disciplines,
@@ -82,6 +84,7 @@ namespace StudentMoodle.Controllers
             {
                 IdLector = lector.Id
             };
+            _logger.LogInformation("Дисциплина создана");
             return View(discipline);
         }
 
@@ -266,7 +269,7 @@ namespace StudentMoodle.Controllers
             }
             
         }
-
+        [Authorize(Policy = "lector")]
         public async Task<IActionResult> TestEdit(int? id)
         {
             if (id == null || _context.Tests == null)
@@ -383,10 +386,10 @@ namespace StudentMoodle.Controllers
             var currentUserName = claimUser.Identity.Name;
             var user = _context.Users.First(u => u.Email == currentUserName);
             var discipline = _context.Disciplines.First(d => d.Id == labWork.IdDiscipline);
-            var userLector = _context.Users.First(u => u.Id == discipline.IdLector);
             var files = _context.Files.ToList();
             var file = files.FirstOrDefault(f => f.IdStudent == user.Id && f.IdLabWork == labWork.Id);
             var score = _context.LabWorkandStudents.ToList().SingleOrDefault(x => x.idlabwork == labWork.Id && x.idstudent == user.Id);
+            var userLector = _context.Users.First(u => u.Id == score.idlector);
             var model = (
                     labWork,
                     file ??= new FileModel() { Id = 0},
@@ -397,6 +400,7 @@ namespace StudentMoodle.Controllers
            
         }
 
+        [Authorize(Policy = "lector")]
         public async Task<IActionResult> LabWorkEdit(int? id)
         {
             if (id == null || _context.LabWorks == null)
@@ -468,6 +472,7 @@ namespace StudentMoodle.Controllers
             }
         }
 
+        [Authorize(Policy = "lector")]
         public ActionResult ConGroupIndex(int id)
         {
             var groups = _context.Group_Disciplines.Where(gd => gd.Iddiscipline == id).ToList();
@@ -497,6 +502,7 @@ namespace StudentMoodle.Controllers
             return View(model);
         }
 
+        [Authorize(Policy = "lector")]
         public async Task<ActionResult> ConnectGroupDiscipline(int idgroup, int iddiscipline)
         {
             var gd = new Group_Discipline()
@@ -522,6 +528,7 @@ namespace StudentMoodle.Controllers
             return RedirectToAction("ConGroupIndex", "Discipline", new { id = iddiscipline });
         }
 
+        [Authorize(Policy = "lector")]
         public ActionResult DisconGroupIndex(int id)
         {
             var groups = _context.Group_Disciplines.Where(gd => gd.Iddiscipline == id).ToList();
@@ -541,6 +548,7 @@ namespace StudentMoodle.Controllers
             return View(model);
         }
 
+        [Authorize(Policy = "lector")]
         public async Task<ActionResult> DisConnectGroupDiscipline(int idgroup, int iddiscipline)
         {
             var gd = new Group_Discipline()
@@ -566,6 +574,7 @@ namespace StudentMoodle.Controllers
             }
 
         }
+
         [HttpGet]
         public ActionResult AddFile(LabWork labWork)
         {
@@ -633,6 +642,7 @@ namespace StudentMoodle.Controllers
             return RedirectToAction("AddFile", "Discipline", labwork);
         }
 
+        [Authorize(Policy = "lector")]
         public ActionResult LabWorkStudents(LabWork labWork, int? idgroup)
         {
             var groupsDownList = _context.Groups.ToList();
@@ -692,9 +702,13 @@ namespace StudentMoodle.Controllers
         public async Task<ActionResult> ScoreLabWork(int idlabwork, int iduser, int iddiscipline, int score)
         {
             var labwork = _context.LabWorks.Find(idlabwork);
+            ClaimsPrincipal claimUser = HttpContext.User;
+            var currentUserName = claimUser.Identity.Name;
+            var user = _context.Users.First(u => u.Email == currentUserName);
 
             var labworkStudent = await _context.LabWorkandStudents.FindAsync(idlabwork, iduser);
             labworkStudent.score = score;
+            labworkStudent.idlector = user.Id;
             _context.LabWorkandStudents.Update(labworkStudent);
 
             await _context.SaveChangesAsync();
@@ -718,6 +732,7 @@ namespace StudentMoodle.Controllers
             }
         }
 
+        [Authorize(Policy = "lector")]
         public ActionResult ResultOfDicsipline(int dkey, int? idgroup)
         {
             var groupsDownList = _context.Groups.ToList();

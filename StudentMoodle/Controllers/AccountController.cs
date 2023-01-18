@@ -13,10 +13,11 @@ namespace StudentMoodle.Controllers
     {
 
         private readonly ApplicationDbContext _context;
-
-        public AccountController(ApplicationDbContext userContext)
+        private readonly ILogger<AccountController> _logger;
+        public AccountController(ApplicationDbContext userContext, ILogger<AccountController>? logger)
         {
             _context = userContext;
+            _logger = logger;
         }
 
         public async Task<ActionResult> Login()
@@ -25,6 +26,7 @@ namespace StudentMoodle.Controllers
             var currentUserName = claimUser.Identity.Name;
             var user = await _context.Users
                 .FirstOrDefaultAsync(s => s.Email == currentUserName);
+            _logger.LogInformation("Пользователь найден");
             if (claimUser.Identity.IsAuthenticated)
                 return RedirectToAction("Index", "Home", user);
 
@@ -46,6 +48,7 @@ namespace StudentMoodle.Controllers
                     var role = await _context.Roles
                     .FirstAsync(r => r.Id == user.RoleId); ;
                     await Authenticate(modelLogin.Email, role.RoleName); // аутентификация
+                    _logger.LogInformation("Аунтификация пройдена");
                     return RedirectToAction("Index", "Home", user);
                 }
 
@@ -74,6 +77,7 @@ namespace StudentMoodle.Controllers
         public async Task<IActionResult> LogOut()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            _logger.LogInformation("Пользователь вышел");
             return RedirectToAction("Login", "Account");
         }
     }

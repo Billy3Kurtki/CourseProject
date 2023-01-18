@@ -318,6 +318,9 @@ namespace StudentMoodle.Models
 
                 entity.Property(e => e.passDate)
                 .HasColumnName("passeddate");
+
+                entity.Property(e => e.idlector)
+                .HasColumnName("idlector");
             });
 
             modelBuilder.Entity<TestandStudent>(entity =>

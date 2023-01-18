@@ -6,22 +6,25 @@ using StudentMoodle.Models;
 
 namespace StudentMoodle.Controllers
 {
-    [Authorize]
+    [Authorize(Policy = "admin")]
     public class UserController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly ILogger<AccountController> _logger;
 
-        public UserController(ApplicationDbContext context)
+        public UserController(ApplicationDbContext context, ILogger<AccountController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
-        // GET: StudentController
+
         public ActionResult Index()
         {
             return View(_context.Users.ToList()) ;
         }
 
+        [Authorize(Policy = "admin")]
         public ActionResult IndexStudent()
         {
             return View(_context.Users.Where(x => x.RoleId == 1).ToList());
@@ -34,12 +37,13 @@ namespace StudentMoodle.Controllers
         }
 
         // GET: StudentController/Details/5
+        [Authorize(Policy = "admin")]
         public ActionResult Details(int id)
         {
             return View(_context.Users.First(x => x.Id == id));
         }
 
-        // GET: StudentController/Create
+        
         [Authorize(Policy = "admin")]
         public ActionResult Create()
         {
@@ -47,7 +51,7 @@ namespace StudentMoodle.Controllers
             return View();
         }
 
-        // POST: StudentController/Create
+       
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(UserView user)
@@ -67,8 +71,8 @@ namespace StudentMoodle.Controllers
             }
         }
 
-        // GET: StudentController/Edit/5
-        [Authorize(Policy = "lector")]
+        
+        [Authorize(Policy = "admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Users == null)
@@ -84,7 +88,7 @@ namespace StudentMoodle.Controllers
             return View(user);
         }
 
-        // POST: StudentController/Edit/5
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, UserView user)
@@ -102,7 +106,7 @@ namespace StudentMoodle.Controllers
         }
 
         // GET: StudentController/Delete/5
-        [Authorize(Policy = "lector")]
+        [Authorize(Policy = "admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Users == null)
@@ -255,6 +259,7 @@ namespace StudentMoodle.Controllers
             }
         }
 
+        [Authorize(Policy = "admin")]
         public ActionResult GroupIndex()
         {
             return View(_context.Groups.ToList());
@@ -284,7 +289,7 @@ namespace StudentMoodle.Controllers
         }
 
         // GET: StudentController/Edit/5
-        [Authorize(Policy = "lector")]
+        [Authorize(Policy = "admin")]
         public async Task<IActionResult> GroupEdit(int? id)
         {
             if (id == null || _context.Groups == null)
@@ -318,7 +323,7 @@ namespace StudentMoodle.Controllers
         }
 
         // GET: StudentController/Delete/5
-        [Authorize(Policy = "lector")]
+        [Authorize(Policy = "admin")]
         public async Task<IActionResult> GroupDelete(int? id)
         {
             if (id == null || _context.Groups == null)

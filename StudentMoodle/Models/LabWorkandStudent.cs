@@ -7,5 +7,6 @@
         public int iddiscipline { get; set; }
         public int score { get; set; }
         public DateTime passDate { get; set; }
+        public int idlector { get; set; }
     }
 }
