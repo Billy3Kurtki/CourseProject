@@ -39,13 +39,20 @@
             {
                 @if (model3.idtest == 0)
                 {
-                    <td>
-                        Начать прохождение
-                    </td>
-                    <td>
-                        <input type="button" value="Пройти тест" 
-                            onclick="location.href='@Url.Action("Index", "Test", model1)'" />
-                    </td>
+                    @if (model1.status == Test.Status.Close)
+                    {
+                        <td>Тест закрыт</td>
+                    }
+                    else
+                    {
+                        <td>
+                            Начать прохождение
+                        </td>
+                        <td>
+                            <input type="button" value="Пройти тест"
+                                onclick="location.href='@Url.Action("Index", "Test", model1)'" />
+                        </td>
+                    }
                 }
                 else
                 {

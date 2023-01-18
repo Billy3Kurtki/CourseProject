@@ -55,8 +55,15 @@
                     <td>
                         <p>
                             <a href="@model2.Path" download="@model2.Path">@model2.Name</a>
-                            <input type="button" value="Загрузить другой файл"
-                           onclick="location.href='@Url.Action("AddFile", "Discipline", model1)'" />
+                            @if (model1.status == LabWork.Status.Close)
+                            {
+                                <p>лабораторная работа закрыта</p>
+                            }
+                            else
+                            {
+                                <input type="button" value="Загрузить другой файл"
+                                    onclick="location.href='@Url.Action("AddFile", "Discipline", model1)'" />
+                            }
                         </p>
                     </td>
                 }
@@ -64,8 +71,15 @@
                 {
                     <td>
                         <p>
-                            <input type="button" value="Загрузить файл"
-                           onclick="location.href='@Url.Action("AddFile", "Discipline", model1)'" />
+                            @if (model1.status == LabWork.Status.Close)
+                            {
+                                <p>лабораторная работа закрыта</p>
+                            }
+                            else
+                            {
+                                <input type="button" value="Загрузить файл"
+                                    onclick="location.href='@Url.Action("AddFile", "Discipline", model1)'" />
+                            }
                         </p>
                     </td>
                 }

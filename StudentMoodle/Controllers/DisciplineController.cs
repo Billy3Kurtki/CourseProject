@@ -250,6 +250,13 @@ namespace StudentMoodle.Controllers
             {
                 test = _context.Tests.First(d => d.Id == idtest);
             }
+
+            if (test.status != Test.Status.Close && DateTime.Now > test.DeadLine)
+            {
+                test.status = Test.Status.Close;
+                _context.Tests.Update(test);
+                await _context.SaveChangesAsync();
+            }
             try
             {
                 var scoreTest = _context.TestandStudents.First(s => s.idtest == idtest && s.idstudent == user.Id);
@@ -379,9 +386,14 @@ namespace StudentMoodle.Controllers
             }
         }
 
-        //    TODO фиксить надо
         public async Task<ActionResult> LabWorkDetails(LabWork labWork)
         {
+            if (labWork.status != LabWork.Status.Close && DateTime.Now > labWork.DeadLine)
+            {
+                labWork.status = LabWork.Status.Close;
+                _context.LabWorks.Update(labWork);
+                await _context.SaveChangesAsync();
+            }
             ClaimsPrincipal claimUser = HttpContext.User;
             var currentUserName = claimUser.Identity.Name;
             var user = _context.Users.First(u => u.Email == currentUserName);
