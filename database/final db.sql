@@ -30,7 +30,7 @@ CREATE TABLE `answeroption` (
   PRIMARY KEY (`idAnswerOption`),
   KEY `fk_answeroption_task1_idx` (`task_idtask`),
   CONSTRAINT `fk_answeroption_task1` FOREIGN KEY (`task_idtask`) REFERENCES `task` (`idtask`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,6 +39,7 @@ CREATE TABLE `answeroption` (
 
 LOCK TABLES `answeroption` WRITE;
 /*!40000 ALTER TABLE `answeroption` DISABLE KEYS */;
+INSERT INTO `answeroption` VALUES (1,'язык программирования',1,1),(2,'си решетка',0,1),(3,'Model-View-Controller',1,2),(4,'хз',0,2),(6,'dadaw',0,4),(7,'awdwad',1,8),(8,'wadwadwa',1,8);
 /*!40000 ALTER TABLE `answeroption` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -56,7 +57,7 @@ CREATE TABLE `discipline` (
   PRIMARY KEY (`iddiscipline`),
   KEY `fk_discipline_lector1_idx` (`lector_User_idUser`),
   CONSTRAINT `fk_discipline_lector1` FOREIGN KEY (`lector_User_idUser`) REFERENCES `lector` (`User_idUser`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -93,8 +94,35 @@ CREATE TABLE `discipline_has_group` (
 
 LOCK TABLES `discipline_has_group` WRITE;
 /*!40000 ALTER TABLE `discipline_has_group` DISABLE KEYS */;
-INSERT INTO `discipline_has_group` VALUES (1,1),(5,1),(4,2);
+INSERT INTO `discipline_has_group` VALUES (1,1),(4,1),(5,1),(1,2),(4,2),(1,3);
 /*!40000 ALTER TABLE `discipline_has_group` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `file`
+--
+
+DROP TABLE IF EXISTS `file`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `file` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `path` varchar(255) NOT NULL,
+  `idstudent` int NOT NULL,
+  `idlabwork` int NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `file`
+--
+
+LOCK TABLES `file` WRITE;
+/*!40000 ALTER TABLE `file` DISABLE KEYS */;
+INSERT INTO `file` VALUES (27,'IGS_Ekzamen.docx','/Files/IGS_Ekzamen.docx',1,1),(29,'1638980586_13-almode-ru-p-ded-moroz-13.jpg','/Files/1638980586_13-almode-ru-p-ded-moroz-13.jpg',5,1);
+/*!40000 ALTER TABLE `file` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -109,7 +137,7 @@ CREATE TABLE `group` (
   `title` varchar(80) NOT NULL,
   `speciality` varchar(80) NOT NULL,
   PRIMARY KEY (`idGroup`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -118,7 +146,7 @@ CREATE TABLE `group` (
 
 LOCK TABLES `group` WRITE;
 /*!40000 ALTER TABLE `group` DISABLE KEYS */;
-INSERT INTO `group` VALUES (1,'pri-120','software engenering'),(2,'ist-120','ing sistemi');
+INSERT INTO `group` VALUES (1,'PRI-120','Software Engenering'),(2,'IST-120','Information Systems'),(3,'VT-120','Vichislitelnie Technology'),(5,'PRI-220','Software Engenering');
 /*!40000 ALTER TABLE `group` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -134,12 +162,12 @@ CREATE TABLE `labwork` (
   `title` varchar(80) NOT NULL,
   `deadline` datetime NOT NULL,
   `manual` varchar(255) NOT NULL,
-  `status` varchar(80) NOT NULL,
+  `status` int NOT NULL,
   `iddiscipline` int NOT NULL,
   PRIMARY KEY (`idlabwork`),
   KEY `fk_labwork_discipline_idx` (`iddiscipline`),
   CONSTRAINT `fk_labwork_discipline` FOREIGN KEY (`iddiscipline`) REFERENCES `discipline` (`iddiscipline`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -148,6 +176,7 @@ CREATE TABLE `labwork` (
 
 LOCK TABLES `labwork` WRITE;
 /*!40000 ALTER TABLE `labwork` DISABLE KEYS */;
+INSERT INTO `labwork` VALUES (1,'Лабораторная работа №1. Построение прямых','2023-02-12 00:00:00','http://op.vlsu.ru/fileadmin/Programmy/Bacalavr_academ/09.03.02/R_prog/09.03.02_TIPiS_RP_2019_01.pdf',0,1),(3,'Лабораторная работа №1. Изучение ASP.NET CORE','2023-02-12 00:00:00','#',1,4),(4,'Лабораторная работа №2. Изучение ASP.NET CORE','2023-03-12 00:00:00','#',1,4),(10,'Лабораторная работа №2. Построение касательных','2023-01-18 00:00:00','https://ispi.cdo.vlsu.ru/pluginfile.php/17782/mod_resource/content/4/TP-1sem-lab01-09.pdf',1,1);
 /*!40000 ALTER TABLE `labwork` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -163,12 +192,16 @@ CREATE TABLE `labwork_has_student` (
   `student_User_idUser` int NOT NULL,
   `discipline_iddiscipline` int NOT NULL,
   `scorelab` int NOT NULL,
+  `passeddate` datetime NOT NULL,
+  `idlector` int NOT NULL,
   PRIMARY KEY (`labwork_idlabwork`,`student_User_idUser`),
   KEY `fk_labwork_has_student_student1_idx` (`student_User_idUser`),
   KEY `fk_labwork_has_student_labwork1_idx` (`labwork_idlabwork`),
   KEY `fk_labwork_has_student_discipline1_idx` (`discipline_iddiscipline`),
+  KEY `fk_labwork_has_student_lector1_idx` (`idlector`),
   CONSTRAINT `fk_labwork_has_student_discipline1` FOREIGN KEY (`discipline_iddiscipline`) REFERENCES `discipline` (`iddiscipline`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_labwork_has_student_labwork1` FOREIGN KEY (`labwork_idlabwork`) REFERENCES `labwork` (`idlabwork`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_labwork_has_student_lector1` FOREIGN KEY (`idlector`) REFERENCES `lector` (`User_idUser`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_labwork_has_student_student1` FOREIGN KEY (`student_User_idUser`) REFERENCES `student` (`User_idUser`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -179,6 +212,7 @@ CREATE TABLE `labwork_has_student` (
 
 LOCK TABLES `labwork_has_student` WRITE;
 /*!40000 ALTER TABLE `labwork_has_student` DISABLE KEYS */;
+INSERT INTO `labwork_has_student` VALUES (1,1,1,10,'2023-01-18 20:03:29',2),(1,5,1,0,'2023-01-18 23:15:27',2),(3,1,4,0,'2023-01-17 21:05:23',2),(4,1,4,0,'2023-01-17 21:25:06',2);
 /*!40000 ALTER TABLE `labwork_has_student` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -248,7 +282,7 @@ CREATE TABLE `score` (
   KEY `fk_score_discipline1_idx` (`discipline_iddiscipline`),
   CONSTRAINT `fk_score_discipline1` FOREIGN KEY (`discipline_iddiscipline`) REFERENCES `discipline` (`iddiscipline`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_score_student1` FOREIGN KEY (`student_User_idUser`) REFERENCES `student` (`User_idUser`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -257,7 +291,7 @@ CREATE TABLE `score` (
 
 LOCK TABLES `score` WRITE;
 /*!40000 ALTER TABLE `score` DISABLE KEYS */;
-INSERT INTO `score` VALUES (1,1,1,27);
+INSERT INTO `score` VALUES (30,5,1,13),(31,7,1,2),(32,1,4,3),(34,6,4,0),(35,6,5,0),(36,1,1,0),(37,6,1,0);
 /*!40000 ALTER TABLE `score` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -285,7 +319,7 @@ CREATE TABLE `student` (
 
 LOCK TABLES `student` WRITE;
 /*!40000 ALTER TABLE `student` DISABLE KEYS */;
-INSERT INTO `student` VALUES (1,1),(5,2);
+INSERT INTO `student` VALUES (1,1),(6,1),(5,2),(7,3);
 /*!40000 ALTER TABLE `student` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -301,6 +335,7 @@ CREATE TABLE `student_has_test` (
   `test_idtest` int NOT NULL,
   `discipline_iddiscipline` int NOT NULL,
   `scoretest` int NOT NULL,
+  `passeddate` datetime NOT NULL,
   PRIMARY KEY (`student_User_idUser`,`test_idtest`),
   KEY `fk_student_has_test_test1_idx` (`test_idtest`),
   KEY `fk_student_has_test_student1_idx` (`student_User_idUser`),
@@ -317,6 +352,7 @@ CREATE TABLE `student_has_test` (
 
 LOCK TABLES `student_has_test` WRITE;
 /*!40000 ALTER TABLE `student_has_test` DISABLE KEYS */;
+INSERT INTO `student_has_test` VALUES (1,7,1,1,'2023-01-18 00:26:07'),(1,20,4,0,'2023-01-19 01:15:12'),(5,7,1,1,'2023-01-18 00:14:51'),(6,7,1,2,'2023-01-18 22:28:42'),(7,7,1,2,'2023-01-18 22:27:16');
 /*!40000 ALTER TABLE `student_has_test` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -334,7 +370,7 @@ CREATE TABLE `task` (
   PRIMARY KEY (`idtask`),
   KEY `fk_task_test1_idx` (`test_idtest`),
   CONSTRAINT `fk_task_test1` FOREIGN KEY (`test_idtest`) REFERENCES `test` (`idtest`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -343,6 +379,7 @@ CREATE TABLE `task` (
 
 LOCK TABLES `task` WRITE;
 /*!40000 ALTER TABLE `task` DISABLE KEYS */;
+INSERT INTO `task` VALUES (1,'что такое с#',7),(2,'расшифруйте MVC',7),(4,'jhgyugi',18),(6,'dawdaw',18),(8,'awawfwaf',4);
 /*!40000 ALTER TABLE `task` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -357,12 +394,12 @@ CREATE TABLE `test` (
   `idtest` int NOT NULL AUTO_INCREMENT,
   `title` varchar(80) NOT NULL,
   `deadLine` datetime NOT NULL,
-  `status` varchar(80) NOT NULL,
+  `status` int NOT NULL,
   `iddiscipline` int NOT NULL,
   PRIMARY KEY (`idtest`),
   KEY `iddiscipline_idx` (`iddiscipline`),
   CONSTRAINT `fk_test_discipline` FOREIGN KEY (`iddiscipline`) REFERENCES `discipline` (`iddiscipline`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -371,6 +408,7 @@ CREATE TABLE `test` (
 
 LOCK TABLES `test` WRITE;
 /*!40000 ALTER TABLE `test` DISABLE KEYS */;
+INSERT INTO `test` VALUES (1,'Тест №1. Двухмерные фракталы','2023-01-18 05:00:00',1,1),(4,'Тест №1. WindowsForms','2023-01-12 00:00:00',0,4),(7,'Тест №2. Криволинейные поверхности','2023-03-12 01:51:00',0,1),(18,'Тест №3. Модели объёмных графических объектов','2023-04-12 00:00:00',1,1),(20,'Тест №2. Диаграммы','2023-04-12 00:00:00',0,4);
 /*!40000 ALTER TABLE `test` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -392,7 +430,7 @@ CREATE TABLE `user` (
   PRIMARY KEY (`idUser`),
   KEY `fk_User_Role_idx` (`Role_id`),
   CONSTRAINT `fk_User_Role` FOREIGN KEY (`Role_id`) REFERENCES `role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -401,7 +439,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'gena','klown','1512','gena@klown.com','2001-12-11',1),(2,'kirill','buba','1122','klown@kirill.com','2003-01-26',2),(3,'admin','admin','admin11','admin@admin.com','1999-02-12',3),(4,'svetlana','teacher','123','teacher@example.com','1982-01-01',2),(5,'abram','stud','4321q','abram@gmail.com','2002-11-12',1),(6,'aaaa','aaaa','aaa','gena@klown1.com','2023-01-10',1);
+INSERT INTO `user` VALUES (1,'Krokodil Gena','genakrokodile','1111','gena@krokodile.com','2001-12-11',1),(2,'Kirill Cheburashkin','cheba','1231','cheba@gmail.com','2003-01-26',2),(3,'Vlad Jubrailka','admin','admin11','admin@admin.com','1999-02-12',3),(4,'Kirillova Svetlana','teacher','123','teacher@example.com','1982-01-01',2),(5,'Abram Linkoln','linkoln','4321q','abram@gmail.com','2002-11-12',1),(6,'Alexandro Potato','potato123','4512','potato@gmail.com','2002-01-10',1),(7,'David Tractor','david123','5124','david123@gmail.com','2003-01-10',1),(10,'Irina Vafelkina','ira521','62123','ira@gmail.com','2002-01-14',1);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -414,4 +452,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-01-10 21:40:26
+-- Dump completed on 2023-01-19  1:52:36
