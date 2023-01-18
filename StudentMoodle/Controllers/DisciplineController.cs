@@ -386,10 +386,10 @@ namespace StudentMoodle.Controllers
             var currentUserName = claimUser.Identity.Name;
             var user = _context.Users.First(u => u.Email == currentUserName);
             var discipline = _context.Disciplines.First(d => d.Id == labWork.IdDiscipline);
+            var userLector = _context.Users.First(u => u.Id == discipline.IdLector);
             var files = _context.Files.ToList();
             var file = files.FirstOrDefault(f => f.IdStudent == user.Id && f.IdLabWork == labWork.Id);
             var score = _context.LabWorkandStudents.ToList().SingleOrDefault(x => x.idlabwork == labWork.Id && x.idstudent == user.Id);
-            var userLector = _context.Users.First(u => u.Id == score.idlector);
             var model = (
                     labWork,
                     file ??= new FileModel() { Id = 0},

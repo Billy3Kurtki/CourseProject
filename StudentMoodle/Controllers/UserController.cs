@@ -62,6 +62,14 @@ namespace StudentMoodle.Controllers
                 var roles = _context.Roles.First(r => r.RoleName == groupName);
                 user.RoleId = roles.Id;
                 _context.Users.Add(user);
+                _context.SaveChanges();
+
+                if (roles.Id == 2)
+                {
+                    var lector = new Lector() { Id = user.Id };
+                    _context.Lectors.Add(lector);
+                }
+                
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
